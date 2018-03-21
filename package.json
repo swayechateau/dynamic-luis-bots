@@ -8,10 +8,7 @@
   },
   "dependencies": {
     "express": "^4.12.4",
-    "nedb": "*",
-    "requestify": "^0.2.5",
-    "nodemailer": "^4.0.1",
-    "ovh": "^2.0.1"
+    "botbuilder": "^3.14.0"
   },
   "keywords": [
     "node",
