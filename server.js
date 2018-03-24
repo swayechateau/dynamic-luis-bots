@@ -1,12 +1,22 @@
 //Require Modules (node_modules folder)
 const express = require('express');
 const builder = require('botbuilder');
-var port = process.env.PORT || 8080
-//Set up Express Server
+const apiRequest = require('request');
+//Set up Restify Server
+var port = process.env.port || process.env.PORT || 3030;
 var server = express();
 server.listen(port, function(){
     console.log('%s listening to %s',server.name, port);
 });
+//connect to database
+var mysql = require('mariasql');
+var query
+var con = new mysql ({
+  host: process.env.db_host,
+  user: process.env.db_user,
+  password: process.env.db_pass,
+  db: process.env.db_name
+  });
 // Set up Connector
 var connector = new builder.ChatConnector({
     appId: process.env.MicrosoftAppId,
@@ -18,80 +28,60 @@ server.post('/api/v1/messages', connector.listen());
 
 // Receive messages from the user and respond by echoing each message back (prefixed with 'You said:')
 var bot = new builder.UniversalBot(connector, function (session) {
+    console.log()
     var question = session.message.text;
     var respond;
-    if(question == "hi"){
+    switch (question){
+        case "hi":
+            respond = "You what mate!";
+            session.send(respond);
+          break;
+        case "weather":
+            var owm_url = `http://api.openweathermap.org/data/2.5/weather?q=london&appid=0b4e754c3b566bef49e7b7d1922f95e8`
+      
+        apiRequest(owm_url, function (err, response, body) {
+          if(err){
+            console.log('error:', err);
+          } else {
+            console.log('body:', body);
+            let request = JSON.parse(body);
+            for(var item of request.weather) {
+            console.log('item: ', [item.id]);
+            var weatherInfo = [item.main];
+            var weatherDesc = [item.desciption];
+            //console.log(queryInfo);
+          }
+            var degrees = request.main.temp - 273.15;
+            respond = "It's "+ parseFloat(Math.round(degrees * 100) / 100).toFixed(2) +" °C, with a chance of "+weatherInfo+", "+weatherDesc+" in "+request.name+"!";
+            console.log(respond)
+            session.send(respond);
+          }
+        });
+          break;
+        default:
+        con.query('SELECT * FROM general WHERE keyword = ?',[question], function(err, rows) {
+            if (err)
+              throw err;
+              console.dir(rows);
+          
+          for(var item of rows) {
+            console.log('item: ', [item.id]);
+            var queryInfo = [item.info];
+            //console.log(queryInfo);
+          }
+          //queryInfo = [item.keyword] ;
+            respond =  " info: "+queryInfo;
+        })
+            //respond = "You said: " + question;
+            console.log(session.send(respond));
+          break;
+    }
+   /* if(question == "hi"){
         respond = "You what mate!";
     }else{
         respond = "You said: " + question;
-    }
+    } */
     
-    session.send(respond);
 });
 
-var request = require('request');
-var debug = require('debug')('botkit:subscribe_events');
 
-module.exports = function(controller) {
-
-    debug('Subscribing to Cisco webhook events...');
-
-    var webhook_name = controller.config.webhook_name || 'Botkit Firehose';
-
-    var list = controller.api.webhooks.list().then(function(list) {
-        var hook_id = null;
-
-        for (var i = 0; i < list.items.length; i++) {
-            if (list.items[i].name == webhook_name) {
-                hook_id = list.items[i].id;
-            }
-        }
-
-        var hook_url = 'https://' + controller.config.public_address + '/ciscospark/receive';
-
-        debug('Cisco Spark: incoming webhook url is ', hook_url);
-
-        if (hook_id) {
-            controller.api.webhooks.update({
-                id: hook_id,
-                resource: 'all',
-                targetUrl: hook_url,
-                event: 'all',
-                secret: controller.config.secret,
-                name: webhook_name,
-            }).then(function(res) {
-                debug('Cisco Spark: SUCCESSFULLY UPDATED CISCO SPARK WEBHOOKS');
-            }).catch(function(err) {
-                debug('FAILED TO REGISTER WEBHOOK', err);
-                throw new Error(err);
-            });
-
-        } else {
-            controller.api.webhooks.create({
-                resource: 'all',
-                targetUrl: hook_url,
-                event: 'all',
-                secret: controller.config.secret,
-                name: webhook_name,
-            }).then(function(res) {
-
-                debug('Cisco Spark: SUCCESSFULLY REGISTERED CISCO SPARK WEBHOOKS');
-            }).catch(function(err) {
-                debug('FAILED TO REGISTER WEBHOOK', err);
-                throw new Error(err);
-            });
-
-        }
-    });
-};
-var controller = builder.sparkbot({
-    // debug: true,
-    limit_to_domain: ['dimensiondata.com'],
-    //limit_to_org: 'my_cisco_org_id',
-    public_address: process.env.public_address,
-    ciscospark_access_token: process.env.access_token,
-    studio_token: process.env.studio_token, // get one from studio.botkit.ai to enable content management, stats, message console and more
-    secret: process.env.secret, // this is an RECOMMENDED but optional setting that enables validation of incoming webhooks
-    webhook_name: 'Cisco Spark bot created with Botkit, override me before going to production',
-    studio_command_uri: process.env.studio_command_uri,
-});
