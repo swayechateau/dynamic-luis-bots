@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <% include ../../partials/head %>
+<body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+  <% include ../../partials/header %>
+  <div class="app-body">
+    <% include ../../partials/sidenav %>
+    <main class="main">
+      <!-- Breadcrumb-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">Home</li>
+        <li class="breadcrumb-item">
+          <a href="/">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Site Configuration</li>
+        <!-- Breadcrumb Menu-->
+        <li class="breadcrumb-menu d-md-down-none">
+          <div class="btn-group" role="group" aria-label="Button group">
+
+          </div>
+        </li>
+      </ol>
+      <div class="container-fluid">
+        <div class="animated fadeIn">
+          <% if(user.perm.wizard === true){ %>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-body">
+                  <h3 class="card-title">Welcome <%=user.name%></h3>
+                  <p >This is where you can initalise the bot portal, for anything to work please update the azure access code
+                       and common bot and database app ID and password.
+                       <br/> For a department bot to work, please create a bot channel on the azure platform and supply the app
+                       id and password to the department.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="card">
+                <div class="card-body">
+                  <h3>Portal Configuration</h3>
+                  <p>Please enter your LUIS Region and <a href="https://portal.azure.com/#blade/HubsExtension/BrowseResourceBlade/resourceType/Microsoft.CognitiveServices%2Faccounts">Ocp Apim Subscription Key</a></p>
+                  <p>Note. A <a href="https://azure.microsoft.com/en-us/try/cognitive-services/?api=spellcheck-api"> bing Spellcheck Api Key</a> is optional</p>
+                  <form action="/config/" method="post">
+                  <% if(skPlaceholder == '' ){skPlaceholder="Please enter Ocp Apim Subscription Key"}; %>
+                  <%   if(bkPlaceholder == ''){bkPlaceholder="Please enter Bing Api Key -optional-"}; %>
+                    <div class="form-row">
+                      <input value="<%=confid%>" name="id" type="hidden">
+                      <div class="form-group col-md-7">
+                        <label for="Ocp-Apim-Subscription-Key">Ocp Apim Subscription Key</label>
+                        <input required type="text" class="form-control" id="Ocp-Apim-Subscription-Key" name="subKey" value="<%=skValue%>" placeholder="<%=skPlaceholder%>">
+                      </div>
+                      <div class="form-group col-md-5">
+                        <label for="luisRegion">LUIS Region</label>
+                        <select required id="luisRegion" name="luisRegion" class="form-control">
+                        <% if(luisRegion === 'westus'){ %>
+                          <option selected>westus</option>
+                          <option>westeurope</option>
+                          <option>australiaeast</option>
+                        <% }else if(luisRegion === 'westeurope'){ %>
+                          <option>westus</option>
+                          <option selected>westeurope</option>
+                          <option>australiaeast</option>
+                        <%  }else if(luisRegion === 'australiaeast'){ %>
+                          <option>westus</option>
+                          <option>westeurope</option>
+                          <option selected>australiaeast</option>
+                        <% }else{ %>
+                          <option>westus</option>
+                          <option>westeurope</option>
+                          <option>australiaeast</option>
+                        <%  } %>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-group col-md-7">
+                        <label for="bingApiKey">Bing Api Key</label>
+                        <input type="text" class="form-control" id="bingApiKey" name="bingKey" value="<%=bkValue%>" placeholder="<%=bkPlaceholder%>">
+                      </div>
+                      <div class="form-group col-md-5">
+                        <label for="bingApiStatus">Bing Spell Checker Status</label>
+                        <select id="bingApiStatus" name="bingStatus" class="form-control" onchange="checkBing()">
+                        <% if(bingStatus == true){%>
+                          <option selected>Enabled</option>
+                          <option>Disabled</option>
+                        <% }else{%>
+                          <option>Enabled</option>
+                          <option selected>Disabled</option>
+                        <% }%>
+                        </select>
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                  </form>
+               </div>
+              </div>
+            </div>
+          </div>
+          <%}else{%>
+            <% include ../error/401 %>
+          <%}%>
+        </div>
+      </div>
+    </main>
+    <% if(user.perm.wizard === true){ %>
+    <% //include ../users/modals/add %>
+    <% //include ../users/modals/delete %>
+    <% include ../department/modals/add %>
+    <% include ../department/modals/delete %>
+    <%}%>
+    <% //include ../../partials/aside %>
+  </div>
+  <% include ../../partials/footer %>
+  <script>
+    function deleteDepartment(id){
+      let url = window.location.protocol+'//'+window.location.hostname+'/department/'+id+'/delete/',
+          delBtn = document.getElementById('delDepartmentBtn');
+      delBtn.href=url
+      $(".bd-delete-modal").modal()
+
+    }
+    function checkBing(){
+        var bingKey = document.getElementById('bingApiKey'),bingStatus= document.getElementById('bingApiStatus')
+        if(bingKey.value === '' && bingStatus.value === 'Enabled'){
+            bingKey.required=true
+        }else{
+            bingKey.required=false
+        }
+    }
+  </script>
+</body>
+
+</html>

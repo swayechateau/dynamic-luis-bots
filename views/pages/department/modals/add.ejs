@@ -1,0 +1,55 @@
+<!-- add department modal -->
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form id="newDepartment" action="/department/submit/" method="post">
+        <div class="modal-header">
+          <h5 class="modal-title">Add Department</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group col-md-7">
+              <label for="departmentName">Department Name</label>
+              <input required type="text" class="form-control" id="departmentName" name="name" placeholder="Please enter deparment name...">
+            </div>
+            <div class="form-group col-md-5">
+              <label for="botName">Bot Name</label>
+              <input type="text" class="form-control" id="botName" name="botName" placeholder="Bot Name as displayed on Azure...">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-7">
+              <label for="microsoftAppId">Microsoft Bot App ID</label>
+              <input type="text" class="form-control" id="microsoftAppId" name="microsoftAppId" placeholder="Please enter Microsoft Bot App ID...">
+            </div>
+            <div class="form-group col-md-5">
+                <label for="microsoftAppPass">Microsoft Bot App Password</label>
+                <input type="text" class="form-control" id="microsoftAppPass" name="microsoftAppPass" placeholder="Please enter Microsoft Bot App Password...">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="sparkAccessToken">Cisco Spark Acess Token</label>
+              <input type="text" class="form-control" id="sparkAccessToken" name="sparkAccessToken" placeholder="Please enter Cisco Spark Acess Token...">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="confluence">Confluence</label>
+              <input type="text" class="form-control" id="confluence" name="confluence" placeholder="Please enter Confluence Space...">
+            </div>
+          </div>
+          <div class="form-group">
+            <input type="hidden" class="form-control" name="status" value="false">
+          </div>
+        </div>
+        <div class="modal-footer">
+            <input id="postDepartment" type="submit" value="save" class="btn btn-primary">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- end of modal -->

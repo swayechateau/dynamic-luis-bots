@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <% include ../../partials/head %>
+<body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+  <% include ../../partials/header %>
+  <div class="app-body">
+    <% include ../../partials/sidenav %>
+    <main class="main">
+      <!-- Breadcrumb-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">Home</li>
+        <li class="breadcrumb-item">
+          <a href="/department">Department</a>
+        </li>
+        <li class="breadcrumb-item active">Team</li>
+        <!-- Breadcrumb Menu-->
+        <li class="breadcrumb-menu d-md-down-none">
+          <div class="btn-group" role="group" aria-label="Button group">
+
+          </div>
+        </li>
+      </ol>
+      <div class="container-fluid">
+        <div class="animated fadeIn">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Welcome <%=user.name%>
+                      <% if(user.perm.admin === true || user.perm.wizard === true){%>
+                      <span class="btn-right">
+                        <button type="button" data-toggle="modal" data-target=".bd-add-modal-lg" class="btn btn-md btn-success">Add Member</button>
+                      </span>
+                      <%}%>
+                    </h5>
+                    <p class="card-text">See below, your fellow team memebers and The Portal Admins.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Portal Super Users</h5>
+                    <table class="table table-responsive-sm">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Name</th>
+                          <th scope="col">Department</th>
+                          <th scope="col">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody id="departmentList">
+                        <% for(let i=0; i< users.length; i++) {
+                           var id = users[i]._id.toString()
+                             , count = i+1, department;
+                            for(let ii=0; ii< perms.length; ii++) {
+                              if(users[i]._id === perms[ii].userId){
+                                for(let iii=0; iii< departments.length; iii++){
+                                  if(perms[ii].department === departments[iii]._id){
+                                    department = departments[iii].friendlyName
+                                  }
+                                }
+                                if(perms[ii].wizard === true){ %>
+                        <tr>
+                          <th scope="col">#</th>
+                          <td><%= users[i].name %></td>
+                          <td><%= department %></td>
+                          <td><a class="btn btn-primary" href="/user/<%= id %>">View</a></td>
+                        </tr>
+                        <% }}}} %>
+                      </tbody>
+                    </table>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Deparment Members
+                  </h5>
+                    <table class="table table-responsive-sm">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Name</th>
+                          <th scope="col">Admin</th>
+                          <th scope="col">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody id="departmentList">
+                      <% for(let i=0; i< users.length; i++) {
+                          var id = users[i]._id.toString(),
+                                    count = i+1,admin;
+                          for(let ii=0; ii< perms.length; ii++) {
+                            if(users[i]._id === perms[ii].userId){
+                              if(user.perm.department === perms[ii].department){%>
+                        <tr>
+                          <th scope='row'><%=count%></th>
+                          <td><%= users[i].name %></td>
+                          <% if(perms[ii].admin === true){admin = 'True'}else{ admin = 'False'}%>
+                          <td><%= admin %></td>
+                          <td><a class="btn btn-primary" href="/user/<%= id %>">View</a></td>
+                        </tr>
+                        <% }}}} %>
+                      </tbody>
+                    </table>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </main>
+    <% if(user.perm.admin === true || user.perm.wizard === true){%>
+    <% include ../users/modals/add %>
+    <%}%>
+  </div>
+  <% include ../../partials/footer %>
+</body>
+
+</html>

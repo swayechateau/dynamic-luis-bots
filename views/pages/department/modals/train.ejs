@@ -1,0 +1,142 @@
+<div class="modal fade bd-train-modal" tabindex="-1" role="dialog" aria-labelledby="trainDepartment" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Train <% if(typeof data !== 'undefined'){%><%=data.friendlyName%><%}%></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p id="trainP">Department training Status <span class="btn-right"><button class="btn btn-info" onclick = 'trainModel()'>Train Department</button></span></p>
+          </div>
+          <table id="train-table"class=" table-hover ">
+            <thead>
+              <tr>
+                <th scope="col">Intent Name</th>
+                <th scope="col">Status</th>
+                <th scope="col">Reason</th>
+              </tr>
+            </thead>
+            <tbody id="train-list">
+
+            </tbody>
+          </table>
+          </br>
+        </div>
+    </div>
+</div>
+<script>
+let intents;
+
+function reqListener () {
+  console.log(this.responseText)
+  if(this.responseText !== ""){
+
+    let failed = false,
+        luisTrainStatus = JSON.parse(this.responseText),
+        trainTable = document.getElementById('train-list'),
+        trainList = trainTable.innerHTML
+    if(typeof luisTrainStatus.error !== 'undefined'){
+        spawnNotification(luisTrainStatus.error.message,'','Training Error')
+    }else if(typeof luisTrainStatus.status !== 'undefined'){
+        spawnNotification(luisTrainStatus.status,'','Training Status')
+    }else{
+        failed = false
+        for(let i=0; i< luisTrainStatus.length; i++){
+          if(luisTrainStatus[i].details.status === "Fail"){
+            console.log(luisTrainStatus[i].modelId)
+            console.log(luisTrainStatus[i].details.status)
+            console.log(luisTrainStatus[i].details.failureReason)
+            var intentName = findIntentName(luisTrainStatus[i].modelId);
+            trainList = trainList+'<tr><td>'+intentName+'</td>'+'<td>'+luisTrainStatus[i].details.status+'</td>'+'<td>'+luisTrainStatus[i].details.failureReason+'</td></tr>'
+            trainTable.innerHTML = trainList
+            failed = true
+          }
+        }
+        if(failed !==true){
+          for(let i=0; i< luisTrainStatus.length; i++){
+            if(luisTrainStatus[i].details.status === "Success"){
+                console.log(luisTrainStatus[i].details.status)
+                luisIntents.forEach((item,index)=>{
+                  if(id === item.id){
+                    trainTable.innerHTML = trainList = trainList+'<tr><td>'+item.name+'</td>'+'<td>'+luisTrainStatus[i].details.status+'</td>'+'<td>N/A</td></tr>'
+                  }
+                })
+                trainTable.innerHTML = trainList
+                failed = false
+            }
+          }
+        }
+        trainStatus(failed)
+    }
+  }else{
+    console.log('App needs to train first')
+    trainModel()
+    location.reload()
+  }
+}
+
+function trainStatus(failed){
+    let trainStatus = document.getElementById('train-status'),
+        trainBtn = document.getElementById('trainBtn'),
+        trainP = document.getElementById('trainP')
+    if(failed===false){
+        trainBtn.title="Bot training is up to date"
+        trainBtn.classList.remove('btn-info')
+        trainBtn.classList.add('btn-secondary')
+        trainStatus.classList.add('fa-check')
+        trainStatus.classList.add('text-success')
+        trainP.innerHTML = "Department training was a success! Nothing to see here"
+      }else{
+        trainBtn.title="Bot needs training!!!"
+        trainBtn.classList.remove('btn-info')
+        trainBtn.classList.add('btn-warning')
+        trainStatus.classList.add('fa-exclamation')
+        trainStatus.classList.add('text-danger')
+        trainP.innerHTML = "Department training Failed! <span class='btn-right'><button class='btn btn-info' onclick = 'trainModel()'>Train Department</button></span> <p> FewLabels = Not enough Utterances for practical use!</p>"
+        spawnNotification('Department training Failed!','','Bot needs training!!!')
+      }
+      document.getElementById('train-table').classList.add('table')
+}
+
+function trainModel(){
+  let url = window.location.protocol+'//'+window.location.hostname+'/department/'+id+"/train"
+  var trainReq = new XMLHttpRequest();
+  trainReq.addEventListener("load", reqListener);
+  trainReq.open("GET", url);
+  trainReq.send();
+}
+
+function findIntentName(id){
+
+  luisIntents.forEach((item,index)=>{
+    if(id === item.id){
+      var x = item.name
+      console.log(x)
+      return x
+    }
+  })
+}
+function getLuisIntents(){
+  let url = window.location.protocol+'//'+window.location.hostname+'/department/'+id+"/intents",
+      intentNameReq = new XMLHttpRequest();
+
+      intentNameReq.addEventListener("load", test);
+      intentNameReq.open("GET", url, true);
+      intentNameReq.send(null);
+
+}
+function test(){
+  luisIntents= JSON.parse(this.responseText);
+}
+
+var url =  window.location.protocol+'//'+window.location.hostname+'/department/'+id+"/appstatus",
+    luisIntents
+var oReq = new XMLHttpRequest();
+oReq.addEventListener("load", reqListener);
+oReq.open("GET", url);
+oReq.send();
+getLuisIntents()
+
+</script>

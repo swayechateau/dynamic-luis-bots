@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <% include ../../partials/head %>
+<body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+  <% include ../../partials/header %>
+  <div class="app-body">
+    <% include ../../partials/sidenav %>
+    <main class="main">
+      <!-- Breadcrumb-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">Home</li>
+        <li class="breadcrumb-item">
+          <a href="/user/<%=user.id%>"><%=user.name%></a>
+        </li>
+        <li class="breadcrumb-item active">Dashboard</li>
+        <!-- Breadcrumb Menu-->
+        <li class="breadcrumb-menu d-md-down-none">
+          <div class="btn-group" role="group" aria-label="Button group">
+
+          </div>
+        </li>
+      </ol>
+      <div class="container-fluid">
+        <div class="animated fadeIn">
+          <div class="row">
+              <div class="col-sm-6">
+                <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Welcome <%=user.name%></h5>
+                    <p class="card-text">We hope you enjoy this bot portal, if you need to learn how to use this web application, please click the button below.</p>
+                    <a href="/guide" class="btn btn-primary">User Guide</a>
+                </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Want more Features?</h5>
+                    <p class="card-text">Well, <%=user.name%> if you want more functionality to the portal... or have a smashing idea. We would love to hear it!</p>
+                    <a href="#" class="btn btn-primary">Submit Feedback</a>
+                </div>
+                </div>
+            </div>
+            <div class="dash-padding"></div>
+              <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        Error Reporting
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Experienced an error on this portal?</h5>
+                        <p class="card-text">If you have experienced and error or issue with this portal, please contact <a href="mailto:support@kitechlimited.co.uk">Ki Tech Support</a>.</p>
+                        <a href="https://support.kitechlimited.co.uk" target="_blank" class="btn btn-primary">Or Log a ticket</a>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div class="clearfix"> </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <% //include ../../partials/aside %>
+  </div>
+  <% include ../../partials/footer %>
+</body>
+
+</html>

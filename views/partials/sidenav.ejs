@@ -1,0 +1,45 @@
+<div class="sidebar">
+    <nav class="sidebar-nav">
+      <ul class="nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/dashboard">
+            <i class="nav-icon icon-speedometer"></i> Dashboard
+          </a>
+        </li>
+        <li class="nav-title">Bot</li>
+        <li class="nav-item">
+          <a class="nav-link" href="/department">
+            <i class="nav-icon icon-drop"></i>My Department</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/intents">
+            <i class="nav-icon icon-pencil"></i> Intents</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/team">
+            <i class="nav-icon icon-pencil"></i> Team</a>
+        </li>
+        <% if(user.perm.wizard === true){%>
+        <li class="nav-title">Admin</li>
+        <li class="nav-item ">
+          <a class="nav-link" href="/department/all">
+            <i class="nav-icon icon-puzzle"></i> All Departments</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/intents/">
+            <i class="nav-icon icon-puzzle"></i> All Intents</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/user/">
+            <i class="nav-icon icon-puzzle"></i> All Users</a>
+        </li>
+        <li class="nav-item mt-auto">
+          <a class="nav-link nav-link-success" href="/portal-config">
+            <i class="nav-icon icon-calculator"></i>Site Config
+          </a>
+        </li>
+        <%}%>
+      </ul>
+    </nav>
+    <button class="sidebar-minimizer brand-minimizer" type="button"></button>
+  </div>

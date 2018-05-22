@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <% include ../../partials/head %>
+<body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+  <% include ../../partials/header %>
+  <div class="app-body">
+    <% include ../../partials/sidenav %>
+    <main class="main">
+      <!-- Breadcrumb-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">Home</li>
+        <li class="breadcrumb-item">
+          <a href="/">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Users</li>
+        <!-- Breadcrumb Menu-->
+        <li class="breadcrumb-menu d-md-down-none">
+          <div class="btn-group" role="group" aria-label="Button group">
+
+          </div>
+        </li>
+      </ol>
+      <div class="container-fluid">
+        <div class="animated fadeIn">
+          <% if(user.perm.wizard === true){ %>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Welcome <%=user.name%>
+                      <% if(user.perm.admin === true || user.perm.wizard === true){%>
+                      <span class="btn-right">
+                        <button type="button" data-toggle="modal" data-target=".bd-add-modal-lg" class="btn btn-md btn-success">Add Member</button>
+                      </span>
+                      <%}%>
+                    </h5>
+                    <p class="card-text">Add users from this section</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Unauthorise Users</h5>
+                    <p class="card-text">If a user has not been added but tried to sign in via single sign on they will be under unauthorised users.</p>
+                    <table class="table table-responsive-sm">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Name</th>
+                          <th scope="col">Created</th>
+                          <th scope="col">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody id="userList">
+                      <% for(let i=0; i< users.length; i++) { %>
+                      <% var count = i+1;
+                          if(users[i].disabled === true){%>
+                        <tr>
+                          <th scope='row'><%=count%></th>
+                          <td><%= users[i].name %></td>
+                          <td><%= users[i].created %></td>
+                          <td><a class="btn btn-primary" href="/user/<%= users[i]._id %>">View</a></td>
+                        </tr>
+                        <% }} %>
+                      </tbody>
+                    </table>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">All Users</h5>
+                    <p class="card-text">Every Authorised User will be listed here.</p>
+                    <table class="table table-responsive-sm">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Name</th>
+                          <th scope="col">Department</th>
+                          <th scope="col">Admin</th>
+                          <th scope="col">Super User</th>
+                          <th scope="col">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody id="userList">
+                      <% for(let i=0; i< users.length; i++){
+                            if(users[i].disabled === false){ %>
+                        <% var count = i+1,admin, wizard,dept;
+                          for(let ii=0; ii< perms.length; ii++) {
+                            if(users[i]._id === perms[ii].userId){
+                              admin = perms[ii].admin
+                              wizard = perms[ii].admin
+                              for(let iii=0; iii< departments.length; iii++) {
+                                if(perms[ii].department === departments[iii]._id){
+                                  dept = departments[iii].friendlyName
+                                }
+                              }
+                            }
+                          } %>
+                        <tr>
+                          <th scope='row'><%=count%></th>
+                          <td><%= users[i].name %></td>
+                          <td><%= dept %></td>
+                          <td><%= admin %></td>
+                          <td><%= wizard %></td>
+                          <td><a class="btn btn-primary" href="/user/<%= users[i]._id %>">View</a></td>
+                        </tr>
+                        <% }} %>
+                      </tbody>
+                    </table>
+                </div>
+              </div>
+            </div>
+        </div>
+        <%}else{%>
+          <% include ../error/401 %>
+        <%}%>
+
+      </div>
+    </main>
+    <% if(user.perm.wizard === true){ %>
+      <% include ../users/modals/add %>
+    <%}%>
+  </div>
+  <% include ../../partials/footer %>
+</body>
+
+</html>

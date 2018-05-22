@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <% include ../../partials/head %>
+<body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+  <% include ../../partials/header %>
+  <div class="app-body">
+    <% include ../../partials/sidenav %>
+    <main class="main">
+      <!-- Breadcrumb-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">Home</li>
+        <li class="breadcrumb-item">
+          <% if(user.perm.wizard === true){%>
+            <a href="/user">Users</a>
+          <% }else if(user.perm.wizard === false){%>
+            <a href="/team">Team</a>
+          <%}%>
+        </li>
+        <li class="breadcrumb-item active"><%=users.name%></li>
+        <!-- Breadcrumb Menu-->
+        <li class="breadcrumb-menu d-md-down-none">
+          <div class="btn-group" role="group" aria-label="Button group">
+            <% var adminEdit = user.perm.wizard === true || user.perm.admin === true && user.perm.department === perms.department && perms.wizard === false
+                , userEdit =  user.perm.wizard === true || user.perm.admin === true && user.perm.department === perms.department && perms.wizard === false || user.id === users._id%>
+          </div>
+        </li>
+      </ol>
+      <div class="container-fluid">
+        <div class="animated fadeIn">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title"><%=users.name%>'s Profile
+                    <% if(adminEdit){%>
+                    <span class="btn-right">
+                      <button type="button" data-toggle="modal" data-target=".bd-add-modal-lg" class="btn btn-md btn-danger">Delete Member</button>
+                    </span>
+                    <%}%>
+                </h5>
+                  <p class="card-text"></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-body">
+                  <form>
+                    <div class="form-row">
+                      <div class="form-group col-md-<% if(users.disabled === true){%>4<%}else{%>6<%}%>">
+                        <label for="userName">User Name</label>
+                        <%if(userEdit){%>
+                        <input type="text" class="form-control" id="userName" name="name" value="<%=users.name%>" placeholder="<%=users.name%>">
+                        <%}else{%>
+                        <input readonly type="text" class="form-control-plaintext" id="userName" name="name" value="<%=users.name%>" placeholder="<%=users.name%>">
+                        <%}%>
+                      </div>
+                      <div class="form-group col-md-<% if(users.disabled === true){%>4<%}else{%>6<%}%>">
+                        <label for="email">email</label>
+                        <%if(userEdit){%>
+                        <input required type="text" class="form-control" id="email" name="email" value="<%=users.email%>" placeholder="<%=users.email%>">
+                        <%}else{%>
+                        <input required readonly type="text" class="form-control-plaintext" id="email" name="email" value="<%=users.email%>" placeholder="<%=users.email%>">
+                        <%}%>
+                      </div>
+                      <% if(users.disabled === true){%>
+                      <div class="form-group col-md-4">
+                        <label for="Status">Status</label>
+                        <input readonly type="text" class="form-control-plaintext" id="status" name="status" value="Un-Authorised User, No Permissions" >
+
+                      </div>
+                      <%}%>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-group col-md-4">
+                        <label for="department">Department</label>
+                        <select <%if(!adminEdit){%>readonly<%}%> class="form-control" name="department">
+                          <%dept.forEach((item,index)=>{%>
+                          <%if(perms.department === item._id){%>
+                          <option selected value="<%=item._id%>"><%=item.friendlyName%></option>
+                          <%}else if(user.perm.wizard === true){%>
+                          <option value="<%=item._id%>"><%=item.friendlyName%></option>
+                          <%}})%>
+                        </select>
+
+                      </div>
+                      <div class="form-group col-md-4">
+                        <label for="admin">Department Admin</label>
+                        <%if(adminEdit){%>
+                          <select class="form-control" name="admin">
+                            <option <%if(perms.admin == false){%>selected<%}%> value="false">No</option>
+                            <option <%if(perms.admin == true){%>selected<%}%> value="true">Yes</option>
+                          </select>
+                        <%}else{%>
+                        <input required readonly type="text" class="form-control-plaintext" id="admin" name="admin" value="<%=perms.admin%>" placeholder="<%=perms.admin%>">
+                        <%}%>
+                      </div>
+                      <div class="form-group col-md-4">
+                        <label for="wizard">Super User</label>
+                        <%if(user.perm.wizard === true ){%>
+                          <select class="form-control" name="wizard">
+                            <option <%if(perms.wizard == false){%>selected<%}%> value="false">No</option>
+                            <option <%if(perms.wizard == true){%>selected<%}%> value="true">Yes</option>
+                          </select>
+                        <%}else{%>
+                        <input required readonly type="text" class="form-control-plaintext" id="wizard" name="wizard" value="<%=perms.wizard%>" placeholder="<%=perms.wizard%>">
+                        <%}%>
+                      </div>
+                    </div>
+                    <%if(userEdit){%>
+                      <div class="form-group">
+                          <input id="postIntent" type="submit" value="Update" class="btn btn-primary">
+                      </div>
+                    <%}%>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <% //include ../../partials/aside %>
+  </div>
+  <% include ../../partials/footer %>
+</body>
+
+</html>

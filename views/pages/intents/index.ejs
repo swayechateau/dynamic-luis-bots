@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <% include ../../partials/head %>
+<body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+  <% include ../../partials/header %>
+  <div class="app-body">
+    <% include ../../partials/sidenav %>
+    <main class="main">
+      <!-- Breadcrumb-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">Home</li>
+        <li class="breadcrumb-item">
+          <a href="/">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Intents</li>
+        <!-- Breadcrumb Menu-->
+        <li class="breadcrumb-menu d-md-down-none">
+          <div class="btn-group" role="group" aria-label="Button group">
+
+          </div>
+        </li>
+      </ol>
+      <div class="container-fluid">
+        <div class="animated fadeIn">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-body">
+                  <h1 class="card-title">Intents<span class="btn-right">
+                    <button type="button" data-toggle="modal" data-target=".bd-example-modal-lg" class="btn btn-md btn-success">Add Intent</button>
+                  </span></h1>
+                  <p class="card-text">This is you can view existing questions the bot can answer, update them or create new ones.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-body">
+                  <table id="tiTable" class="table table-responsive-sm">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Department</th>
+                        <th scope="col">Updated</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="intentList">
+                      <% for(i=0; i< intentsData.length; i++) {
+                            if(user.perm.wizard == true){ %>
+                      <tr>
+                        <% var id = intentsData[i]._id.toString(),disabled;
+                           if (intentsData[i].diasbled == "true") {disabled = 'Disabled'} else { disabled = 'Enabled'}
+                              for(let ii=0; ii<departments.length; ii++){
+                                  if(intentsData[i].department == departments[ii]._id){department=departments[ii].friendlyName}
+                                  }
+                              var count = i+1;
+                              var b = intentsData[i].updated.split(/\D+/),
+                                  c = intentsData[i].created.split(/\D+/),
+                                  updated = new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6])),
+                                  created = new Date(Date.UTC(b[0], --c[1], c[2], c[3], c[4], c[5], c[6]))
+
+                              %>
+
+                              <th scope='row'><%=count%></th>
+                              <td><%= intentsData[i].name %></td>
+                              <td><%= department %></td>
+                              <td><%= updated%></td>
+                              <td><%=disabled %></td>
+                              <td><a class="btn btn-primary" href="/intents/<%= id %>">View</a> <span class="btn-right"><button class="btn btn-danger" onclick="deleteintent('<%= id %>')">Delete</button></span></td>
+                              </tr>
+                            <% }else{if(intentsData[i].department == user.perm.department){ %>
+                                                                <tr>
+                            <% var id = intentsData[i]._id.toString(),
+                                  disabled;
+                              if (intentsData[i].diasbled == "true") {disabled = 'Disabled'} else { disabled = 'Enabled'}
+                              for(let ii=0; ii<departments.length; ii++){
+                                  if(intentsData[i].department == departments[ii]._id){department=departments[ii].friendlyName}
+                                  }
+                              var count = i+1;
+                              var b = intentsData[i].updated.split(/\D+/),
+                                  c = intentsData[i].created.split(/\D+/),
+                                  updated = new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6])),
+                                  created = new Date(Date.UTC(b[0], --c[1], c[2], c[3], c[4], c[5], c[6]))
+
+                              %>
+
+                              <th scope='row'><%=count%></th>
+                              <td><%= intentsData[i].name %></td>
+                              <td><%= department %></td>
+                              <td><%= updated%></td>
+                              <td><%=disabled %></td>
+                              <td><a class="btn btn-primary" href="/intents/<%= id %>">View</a> <span class="btn-right"><button class="btn btn-danger" onclick="deleteintent('<%= id %>')">Delete</button></span></td>
+                              </tr>
+                            <% }}} %>
+                        </tbody>
+                    </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <% include ./modals/add %>
+    <% include ./modals/delete %>
+    <% //include ../../partials/aside %>
+  </div>
+  <% include ../../partials/footer %>
+  <script>
+      function deleteintent(id){
+        let url = window.location.protocol+'//'+window.location.hostname+'/department/intents/'+id+'/delete/',
+            delBtn = document.getElementById('delIntentBtn');
+        delBtn.href=url
+        $(".bd-delete-modal").modal()
+      }
+  </script>
+</body>
+
+</html>

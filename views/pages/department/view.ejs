@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <% include ../../partials/head %>
+<body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+  <% include ../../partials/header %>
+  <div class="app-body">
+    <% include ../../partials/sidenav %>
+    <main class="main">
+      <!-- Breadcrumb-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">Home</li>
+        <li class="breadcrumb-item">
+          <a href="/">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active"><%=data.friendlyName%></li>
+        <!-- Breadcrumb Menu-->
+        <li class="breadcrumb-menu d-md-down-none">
+          <div class="btn-group" role="group" aria-label="Button group">
+
+          </div>
+        </li>
+      </ol>
+      <div class="container-fluid">
+        <div class="animated fadeIn">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-body">
+                  <h2 class="card-title"><%=data.friendlyName%>
+                    <% if(user.perm.admin == true ||user.perm.wizard == true ){ %>
+                    <span class="btn-right">
+                      <button id="trainBtn" title="" data-toggle="modal" data-target=".bd-train-modal" class="btn btn-md btn-info"><i id="train-status" class="fa "></i> Train</button>
+                      <button type="button" data-toggle="modal" data-target=".bd-publish-modal-lg" class="btn btn-md btn-success">Publish</button>
+                      <% if(user.perm.wizard == true ){ %>
+                      <button type="button" data-toggle="modal" data-target=".bd-delete-modal" class="btn btn-md btn-danger">Delete</button>
+                      <%}%>
+                    </span>
+                    <%}%>
+                  </h2>
+                  <% if(user.perm.wizard == true ){ %>
+                    <p id="deptInfo">Here you can edit the details for the departments bot. <br/> Bot Message Endpoint: </p>
+                  <% }else if(user.perm.admin == true ){ %>
+                  <p>Here you can edit the details for the departments bot.</p>
+                  <%}else{%>
+                    <p>Here you can view the details for the departments bot.</p>
+                  <%}%>
+                </div>
+              </div>
+            </div>
+            <% if(user.perm.admin == true ||user.perm.wizard == true ){ %>
+              <div class="col-sm-12">
+                <div class="card">
+                  <div class="card-body">
+                    <form id="putDepartment" action="/department/<%=data._id%>" method="post">
+                      <div class="form-row">
+                        <div class="form-group col-md-7">
+                          <label for="departmentName">Department Name</label>
+                          <input required type="text" class="form-control" id="departmentName" name="friendlyName" value="<%=data.friendlyName%>" placeholder="<%=data.friendlyName%>">
+                        </div>
+                        <div class="form-group col-md-5">
+                          <label for="confluence">Confluence</label>
+                          <% if(data.confluence ===''){var confluence = 'Please enter confluence space...',confluenceValue=''}else{confluence=confluenceValue=data.confluence}%>
+                          <input  type="text" class="form-control" id="confluence" name="confluence" value="<%=confluenceValue%>" placeholder="<%=confluence%>">
+                        </div>
+                      </div>
+                      <% if(user.perm.wizard == true ){ %>
+                      <div class="form-row">
+                        <div class="form-group col-md-2">
+                          <label for="botName">Bot Name</label>
+                          <% if(data.botName ===''){var botName = 'Please enter azure bot name...',botNameValue=''}else{botName=botNameValue=data.botName}%>
+                          <input required type="text" class="form-control" id="botName" name="botName" value="<%=botNameValue%>" placeholder="<%=botName%>">
+                        </div>
+                        <div class="form-group col-md-5">
+                          <label for="microsoftAppId">Microsoft Bot App ID</label>
+                          <% if(data.microsoftBotAppId ===''){var microsoftBotAppId = 'Please enter Microsoft App ID...',microsoftBotAppIdValue=''}else{microsoftBotAppId=microsoftBotAppIdValue=data.microsoftBotAppId}%>
+                          <input required type="text" class="form-control" id="microsoftAppId" name="microsoftAppId" value="<%=microsoftBotAppIdValue%>" placeholder="<%=microsoftBotAppId%>">
+                        </div>
+                        <div class="form-group col-md-5">
+                          <label for="microsoftAppPass">Microsoft Bot App Password</label>
+                          <% if(data.microsoftBotAppPass ===''){var microsoftBotAppPass = 'Please enter Microsoft Bot App Password...',microsoftBotAppPassValue=''}else{microsoftBotAppPass=microsoftBotAppPassValue=data.microsoftBotAppPass}%>
+                          <input required type="text" class="form-control" id="microsoftAppPass" name="microsoftAppPass" value="<%=microsoftBotAppPassValue%>" placeholder="<%=microsoftBotAppPass%>">
+                        </div>
+                      </div>
+
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label for="sparkAccessToken">Cisco Spark Acess Token</label>
+                          <% if(data.sparkAccessToken ===""){var sparkAccessToken = 'Please enter Microsoft Bot App Password...',sparkAccessTokenValue=''}else{sparkAccessToken=sparkAccessTokenValue=data.sparkAccessToken}%>
+                          <input type="text" class="form-control" id="sparkAccessToken" name="sparkAccessToken" placeholder="<%=sparkAccessToken%>" value="<%=sparkAccessTokenValue%>">
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="analytics">Analytics</label>
+                          <% if(data.analyticsId ===''){var analytics = 'Please enter Microsoft Bot App Password...',analyticsValue=''}else{analytics=analyticsValue=data.analyticsId}%>
+                          <input type="text" class="form-control" id="analytics" name="analyticsId" value="<%=analyticsValue%>"placeholder="<%=analytics%>">
+                        </div>
+                      </div>
+                      <%}%>
+                      <div class="form-row">
+                        <div class="form-group col-md-3">
+                          <label for="luisName">Luis App Name</label>
+                          <input required readonly type="text" class="form-control-plaintext" id="luisName" name="name" value="<%=data.name%>" placeholder="<%=data.name%>">
+                        </div>
+                        <div class="form-group col-md-5">
+                          <label for="luisAppId">LUIS App ID</label>
+                          <input required readonly type="text" class="form-control-plaintext" id="luisAppId" name="luisAppId" value="<%=data.luisAppId%>" placeholder="<%=data.luisAppId%>">
+                        </div>
+                        <div class="form-group col-md-1">
+                          <label for="luisAppPass">App Ver</label>
+                          <input required readonly type="text" class="form-control-plaintext" id="luisAppVer" name="luisAppVer" value="<%=data.luisAppVer%>" placeholder="<%=data.luisAppVer%>">
+                        </div>
+                        <div class="form-group col-md-3">
+                          <label for="luisState">LUIS Production State</label>
+                          <% if(data.luisState ===''){var luisState = 'Unpublished', luisValue=''}else{luisState=luisValue=data.luisState}%>
+                          <input required readonly type="text" class="form-control-plaintext" id="luisState" name="luisState" value="<%=luisValue%>" placeholder="<%=luisState%>">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <input type="hidden" class="form-control" name="appid" value="<%=data.luisAppId%>">
+                        <input type="hidden" class="form-control" name="id" value="<%=data._id%>">
+                      </div>
+                      <div class="form-group">
+                          <input id="postDepartment" type="submit" value="save" class="btn btn-primary">
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            <% } %>
+
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-body">
+                  <div class="form-row">
+                    <div class="form-group col-md-3">
+                      <label for="botName">Bot Name</label>
+                      <% if(data.botName ===''){var botName = 'No bot created yet...',botNameValue=''}else{botName=botNameValue=data.botName}%>
+                      <input readonly type="text" class="form-control-plaintext" id="botName" name="botName" value="<%=botNameValue%>" placeholder="<%=botName%>">
+                    </div>
+                    <div class="form-group col-md-5">
+                      <label for="confluence">Confluence</label>
+                      <% if(data.confluence ===''){var confluence = 'No confluence space assigend...',confluenceValue=''}else{confluence=confluenceValue=data.confluence}%>
+                      <input  readonly type="text" class="form-control-plaintext" id="confluence" name="confluence" value="<%=confluenceValue%>" placeholder="<%=confluence%>">
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="luisState">LUIS Production State</label>
+                      <% if(data.luisState ===''){var luisState = 'Unpublished', luisValue=''}else{luisState=luisValue=data.luisState}%>
+                      <input readonly type="text" class="form-control-plaintext" id="luisState" name="luisState" value="<%=luisValue%>" placeholder="<%=luisState%>">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script>
+      var botEnd = document.getElementById('deptInfo'),
+          id = document.getElementsByName('id')[0].value;;
+          botEnd.innerHTML= botEnd.innerHTML +' '+ botMesageEndpoint()
+    function botMesageEndpoint(){
+      let host = window.location.protocol+'//'+window.location.hostname;
+      let botUrl = host + '/bot/'+id+'/messages';
+      return botUrl
+    }
+  </script>
+    <% include ./modals/train %>
+
+    <% include ./modals/publish %>
+
+    <% include ./modals/delete %>
+    <% //include ../../partials/aside %>
+  </div>
+  <% include ../../partials/footer %>
+
+</body>
+
+</html>

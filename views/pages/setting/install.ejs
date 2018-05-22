@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <% include ../../partials/head %>
+<body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+  <div class="app-body">
+    <main class="">
+      <div class="container-fluid">
+        <div class="animated fadeIn">
+          <% if(user.perm.wizard === true){ %>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-body">
+                  <h3 class="card-title">Dimension Data Bot Portal - First time setup</h3>
+                  <p>Please initalise the bot portal, by adding the LUIS Region and <a target="_blank" href="https://portal.azure.com/#blade/HubsExtension/BrowseResourceBlade/resourceType/Microsoft.CognitiveServices%2Faccounts">Ocp Apim Subscription Key - If you do not see a coginative service, add a Luis Learning</a>
+                  </p>
+                  <p>In order for the portal to work effectively, please add the main department responsible for managing the Azure Subscription (This will be the main department for the super user) - <span class="text-warning">This will be assigned to your account</span></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-body">
+                  <form action="/install" method="post">
+                    <div class="form-row">
+                      <div class="form-group col-md-4">
+                        <label for="departmentName">Department Name</label>
+                        <input <%if(none === true){%>required<%}else{%>disabled<%}%> type="text" class="form-control" id="departmentName" name="name" placeholder="Please enter Main deparment name...">
+                      </div>
+                      <div class="form-group col-md-5">
+                        <label for="Ocp-Apim-Subscription-Key">Ocp Apim Subscription Key</label>
+                        <input required type="text" class="form-control" id="Ocp-Apim-Subscription-Key" name="subKey" placeholder="Please enter Subscription Key">
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label for="luisRegion">LUIS Region</label>
+                        <select required id="luisRegion" name="luisRegion" class="form-control">
+                          <option>westus</option>
+                          <option>westeurope</option>
+                          <option>australiaeast</option>
+                        </select>
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Continue</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <%}else{%>
+            <% include ../error/401 %>
+          <%}%>
+       </div>
+     </div>
+   </main>
+ </div>
+</body>
+
+</html>

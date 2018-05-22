@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <% include ../../partials/head %>
+<body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+  <% include ../../partials/header %>
+  <div class="app-body">
+    <% include ../../partials/sidenav %>
+    <main class="main">
+      <!-- Breadcrumb-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">Home</li>
+        <li class="breadcrumb-item">
+          <a href="/intents">Intents</a>
+        </li>
+        <li class="breadcrumb-item active"><%=intent.name%></li>
+        <!-- Breadcrumb Menu-->
+        <li class="breadcrumb-menu d-md-down-none">
+          <div class="btn-group" role="group" aria-label="Button group">
+
+          </div>
+        </li>
+      </ol>
+      <div class="container-fluid">
+        <div class="animated fadeIn">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title"><%=intent.name%><span class="btn-right">
+                      <button id="statusBtn" onclick="toggleDisabled()" class="btn btn-checkbox-toggle"> Enable/Disable</button>
+                      <button class="btn btn-danger" data-toggle="modal" data-target=".bd-delete-modal">Delete</button>
+                    </span></h1>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-body">
+                  <form action="../../department/intents/<%=intent._id%>" method="post">
+              <div class="form-group">
+                <label for="intent-name">Intent Name</label>
+                <input type="text" class="form-control" value="<%=intent.name%>" ng-model="name" ng-init="name='<%=intent.name%>'" name="name" placeholder="<%=intent.name%>">
+              </div>
+              <div class="form-group">
+                <label for="intent-description">Associated Department</label>
+                  <select class="form-control" name="department">
+                    <% for(let i=0; i<departments.length; i++){
+                        if(intent.department == departments[i]._id){ %>
+                        <option selected value="<%=departments[i]._id%>">
+                            <%=departments[i].friendlyName%>
+                        </option>
+                    <% }else if(user.perm.wizard==true){%>
+                        <option value="<%=departments[i]._id%>">
+                            <%=departments[i].friendlyName%>
+                        </option>
+                    <%}}%>
+                  </select>
+              </div>
+              <div class="form-group">
+                <label for="intent-utterance">New Utterance</label>
+                <input type="text" class="form-control" id="intent-utterance" placeholder="Please enter a new utterance and press enter" value="" name="newUtt">
+              </div>
+
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Utterance</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% for(let i=0; i<utterance.length; i++){
+                      if(utterance[i].intentLabel == intent.name){ %>
+                    <tr>
+                      <td><div class="input-group"><input id="<%=utterance[i].id%>" type="text" class="form-control inputUtt" placeholder="<%=utterance[i].text%>" value="<%=utterance[i].text%>"><div class="input-group-append"><button type="button" class="btn btn-outline-info" onclick="updateUtt('<%=utterance[i].id%>')">Update</button> <button type="button" class="btn btn-outline-danger" onclick="deleteUtt('<%=utterance[i].id%>')">Delete</button></div></div></td>
+                    </tr>
+                  <%}}%>
+                </tbody>
+              </table>
+              <div class="form-group">
+                <label for="intent-answer">Bot Answer</label>
+                <textarea rows="1" class="form-control" name="answer" placeholder="<%=intent.answer%>" value="<%=intent.answer%>"><%=intent.answer%></textarea>
+              </div>
+              <div class="form-group">
+                <input readonly type="hidden" class="form-control" name="id" value="<%=intent._id%>">
+                <input readonly type="hidden" class="form-control" name="disabled" value="<%=intent.disabled%>">
+              </div>
+              <div class="form-group">
+                <input id="save" type="submit" value="Save Changes" class="btn btn-primary">
+              </div>
+            </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <% include ./modals/delete %>
+  </div>
+  <% include ../../partials/footer %>
+  <script>
+    let intentState = document.getElementsByName('disabled')[0],
+    bool = strToBool(intentState.value),
+    newUtt = document.getElementById('intent-utterance')
+    disabledStatus(bool)
+  function updateUtt (id){
+    var utt = document.getElementById(id).value,
+        url = window.location.toString()+'/utt',
+        trainReq = new XMLHttpRequest();
+    trainReq.addEventListener("load", reqListener);
+    trainReq.open("POST", url);
+    trainReq.setRequestHeader("Content-Type", "application/json");
+    trainReq.send(JSON.stringify({id:id, utt:{name:"<%=intent.name%>",newUtt:utt},department:"<%=intent.department%>"}));
+  }
+  function deleteUtt (id){
+    var utt = document.getElementById(id).value
+        url = window.location.toString()+'/utt',
+        trainReq = new XMLHttpRequest();
+
+    trainReq.addEventListener("load", reqListener);
+    trainReq.open("DELETE", url);
+    trainReq.setRequestHeader("Content-Type", "application/json");
+    trainReq.send(JSON.stringify({id:id, department:"<%=intent.department%>"}));
+  }
+  function reqListener () {
+    console.log(this.responseText)
+    if(this.responseText === "Utterance Updated"){
+      alert(this.responseText)
+      location.reload();
+    }else if(this.responseText === "Utterance Deleted"){
+      alert(this.responseText)
+      location.reload();
+    }else{
+      alert(this.responseText)
+    }
+    location.reload();
+  }
+  function toggleDisabled(){
+    bool = !bool;
+    intentState.value=bool
+    disabledStatus(bool)
+  }
+  function disabledStatus(bool){
+    let disabledBtn = document.getElementById('statusBtn')
+    if(bool===false){
+      disabledBtn.title="Intent is enabled"
+      disabledBtn.innerHTML="<i class='fa fa-check text-success'></i> Enabled!!"
+      disabledBtn.classList.remove('btn-secondary')
+      disabledBtn.classList.add('btn-info')
+    }else if(bool===true){
+      disabledBtn.title="intent is disabled"
+      disabledBtn.innerHTML="<i class='fa fa-times text-danger'></i> Disabled!!"
+      disabledBtn.classList.remove('btn-info')
+      disabledBtn.classList.add('btn-secondary')
+    }
+  }
+  function strToBool(str){
+    if (str === "false"){
+      return str = false
+    }else{
+      return str = true
+    }
+  }
+</script>
+</body>
+
+</html>

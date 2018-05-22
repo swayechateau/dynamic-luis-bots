@@ -1,0 +1,47 @@
+<div class="modal fade bd-publish-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form id="publishApp" action="/department/publish/" method="post">
+        <div class="modal-header">
+          <h5 class="modal-title">Publish <%=data.friendlyName%></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group col-md-8">
+            <%if(data.luisState === ''){let luisState = 'Unpublished'}else{luisState=data.luisState}
+              if(config.bingStatus ===true){let bingStatus = 'Enabled'}else{bingStatus = 'Disabled'}%>
+                Published State: <%=luisState%><br/>
+                Published version: <%=data.luisAppVer%><br/>
+                Published Date: <%=data.luisPubDate%><br/>
+                Bing Spell Check: <%=bingStatus%> </p>
+            </div>
+            <div class="form-group col-md-4">
+              <label>Publish to</label>
+              <select name="luisState" class="form-control">
+              <% if(data.luisState === 'Staging'){ %>
+                <option>Production</option>
+                <option selected >Staging</option>
+              <% }else{%>
+                <option selected >Production</option>
+                <option>Staging</option>
+              <% }%>
+              </select>
+            </div>
+            <div class="form-group col-md-2">
+              <input required readonly type="hidden" class="form-control" id="deptId" name="id" value="<%=data._id%>" placeholder="<%=data._Id%>">
+              <input required readonly type="hidden" class="form-control" id="luisAppId" name="luisAppId" value="<%=data.luisAppId%>" placeholder="<%=data.luisAppId%>">
+              <input required readonly type="hidden" class="form-control" id="luisAppVer" name="luisAppVer" value="<%=data.luisAppVer%>" placeholder="<%=data.luisAppVer%>">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <input id="postDepartment" title="<%=data.friendlyName%> is ready! &#128521;" type="submit" value="Publish" class="btn btn-primary">
+          <button type="button" title="Noooo... <%=data.friendlyName%> is not ready" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

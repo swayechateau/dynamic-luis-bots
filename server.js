@@ -1,87 +1,52 @@
-//Require Modules (node_modules folder)
-const express = require('express');
-const builder = require('botbuilder');
-const apiRequest = require('request');
-//Set up Restify Server
-var port = process.env.port || process.env.PORT || 3030;
-var server = express();
-server.listen(port, function(){
-    console.log('%s listening to %s',server.name, port);
-});
-//connect to database
-var mysql = require('mariasql');
-var query
-var con = new mysql ({
-  host: process.env.db_host,
-  user: process.env.db_user,
-  password: process.env.db_pass,
-  db: process.env.db_name
-  });
-// Set up Connector
-var connector = new builder.ChatConnector({
-    appId: process.env.MicrosoftAppId,
-    appPassword: process.env.MicrosoftAppPassword
-});
-// Listen for messages from users 
-server.post('/api/v1/messages', connector.listen());
+const express = require('express')
+    , cookieParser = require('cookie-parser')
+    , expressSession = require('express-session')
+    , methodOverride = require('method-override')
+    , passport = require('passport')
+    , path = require('path')
+      global.rootDir = path.resolve(__dirname)
+      require('./lib/auth/passport')
+      global.ensureAuthenticated = function(req, res, next) {
+        if (req.isAuthenticated()) { return next(); }
+          res.redirect('/auth');
+      }
+      global.user = {id:'5afcce86fb860e4dcc59a977', name:'Swaye Chateau', perm:{admin:false, wizard:true,department:'5abea0315abfbb0b50afdc0e'}}
+    , app = express()
+    , port = process.env.PORT || 80
+    , util = require('util')
+    , bunyan = require('bunyan')
+    , bodyParser = require('body-parser')
+    , routes = require('./routes/index')
+    , morgan = require('morgan')
+
+    /*, azureConfig = require(rootDir+'/lib/auth/azure')
+    , passport = require('passport')
+    , OIDCStrategy = require('passport-azure-ad').OIDCStrategy;*/
+    var log = bunyan.createLogger({
+        name: 'Microsoft OIDC Bot Framework Application'
+    });
+
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+app.engine('html', require('ejs').renderFile);
+
+app.use(morgan('dev')); // log every request to the console
+
+app.use(methodOverride());
+app.use(cookieParser());
+
+app.use(expressSession({ secret: 'keyboard cat', resave: true, saveUninitialized: false }));
+
+app.use(bodyParser.json());  // get information from html forms
+app.use(bodyParser.urlencoded({extended: true}));
+// required for passport
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+
+app.use(express.static(__dirname + '/public'));
+app.use('/vendor', express.static(path.join(__dirname, 'node_modules')))
+app.use('/', routes);
 
 
-// Receive messages from the user and respond by echoing each message back (prefixed with 'You said:')
-var bot = new builder.UniversalBot(connector, function (session) {
-    console.log()
-    var question = session.message.text;
-    var respond;
-    switch (question){
-        case "hi":
-            respond = "You what mate!";
-            session.send(respond);
-          break;
-        case "weather":
-            var owm_url = `http://api.openweathermap.org/data/2.5/weather?q=london&appid=0b4e754c3b566bef49e7b7d1922f95e8`
-      
-        apiRequest(owm_url, function (err, response, body) {
-          if(err){
-            console.log('error:', err);
-          } else {
-            console.log('body:', body);
-            let request = JSON.parse(body);
-            for(var item of request.weather) {
-            console.log('item: ', [item.id]);
-            var weatherInfo = [item.main];
-            var weatherDesc = [item.desciption];
-            //console.log(queryInfo);
-          }
-            var degrees = request.main.temp - 273.15;
-            respond = "It's "+ parseFloat(Math.round(degrees * 100) / 100).toFixed(2) +" °C, with a chance of "+weatherInfo+", "+weatherDesc+" in "+request.name+"!";
-            console.log(respond)
-            session.send(respond);
-          }
-        });
-          break;
-        default:
-        con.query('SELECT * FROM general WHERE keyword = ?',[question], function(err, rows) {
-            if (err)
-              throw err;
-              console.dir(rows);
-          
-          for(var item of rows) {
-            console.log('item: ', [item.id]);
-            var queryInfo = [item.info];
-            //console.log(queryInfo);
-          }
-          //queryInfo = [item.keyword] ;
-            respond =  " info: "+queryInfo;
-        })
-            //respond = "You said: " + question;
-            console.log(session.send(respond));
-          break;
-    }
-   /* if(question == "hi"){
-        respond = "You what mate!";
-    }else{
-        respond = "You said: " + question;
-    } */
-    
-});
 
-
+app.listen(port)

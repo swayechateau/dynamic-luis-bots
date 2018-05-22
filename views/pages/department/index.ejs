@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <% include ../../partials/head %>
+<body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+  <% include ../../partials/header %>
+  <div class="app-body">
+    <% include ../../partials/sidenav %>
+    <main class="main">
+      <!-- Breadcrumb-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">Home</li>
+        <li class="breadcrumb-item">
+          <a href="/">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">All Departments</li>
+        <!-- Breadcrumb Menu-->
+        <li class="breadcrumb-menu d-md-down-none">
+          <div class="btn-group" role="group" aria-label="Button group">
+
+          </div>
+        </li>
+      </ol>
+      <div class="container-fluid">
+        <div class="animated fadeIn">
+          <%if(user.perm.wizard === true){ %>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-body">
+                  <h1>All Departments
+                    <span class="btn-right">
+                      <button type="button" data-toggle="modal" data-target=".bd-example-modal-lg" class="btn btn-md btn-success">Add Department</button>
+                    </span>
+                  </h1>
+                  <p>This is you can view existing questions the bot can answer, update them or create new ones.</p>
+                </div>
+              </div>
+            </div>
+            <!-- list departments table -->
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-body">
+                  <table id="tiTable" class="table table-responsive-sm">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Created</th>
+                        <th scope="col">Updated</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="departmentList">
+                    <% for(let i=0; i< departmentsData.length; i++) { %>
+                      <tr>
+                      <% var id = departmentsData[i]._id.toString(),
+                                  count = i+1,
+                                  b = departmentsData[i].updated.split(/\D+/),
+                                  c = departmentsData[i].created.split(/\D+/),
+                                  updated = new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6])),
+                                  created = new Date(Date.UTC(b[0], --c[1], c[2], c[3], c[4], c[5], c[6]))
+                         if(departmentsData[i].luisState ===''){var luisState = 'Unpublished', luisValue=''}else{luisState=luisValue=departmentsData[i].luisState}
+                      %>
+                        <th scope='row'><%=count%></th>
+                        <td><%= departmentsData[i].friendlyName %></td>
+                        <td><%= created %></td>
+                        <td><%= updated%></td>
+                        <td><%= luisState %></td>
+                        <td><a class="btn btn-primary" href="/department/<%= id %>">View</a><span class="btn-right"><button class="btn btn-danger" onclick="deleteDepartment('<%= id %>')">Delete</button></span></td>
+                      </tr>
+                      <% } %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <!-- end of department table -->
+            <!-- end of col-12 -->
+          </div>
+          <!-- end of row -->
+          <%}else{%>
+            <center class="row">
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-body">
+                  <h1 class="display-3 mr-4">401</h1>
+                  <h5 class="card-title">Oops! You're lost.</h5>
+                  <p class="card-text">The page you are looking for is currently out of reach.. I hope you was not snooping ;).</p>
+                  <img class="center-block" src="https://media1.tenor.com/images/9b9415b1457776bbbed74bf14419bec4/tenor.gif?itemid=11092516" alt="lost">
+                  <p></p>
+                  <a class="btn btn-lg btn-block btn-info" href="/" title="Come Back Home">Return Home</a>
+                </div>
+              </div>
+            </div>
+          </center>
+          <%}%>
+        </div>
+      </div>
+      </div>
+    </main>
+
+    <% if(user.perm.wizard === true){ %>
+        <% include ./modals/add %>
+      <%  include ./modals/delete %>
+      <%}%>
+    <% //include ../../partials/aside %>
+  </div>
+  <% include ../../partials/footer %>
+</body>
+
+</html>
