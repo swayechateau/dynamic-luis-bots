@@ -60,10 +60,16 @@ router.post('/openid/return',
   });
 // LOGOUT ================================
 router.get('/logout', function(req, res){
-  req.session.destroy(function(err) {
-    req.logOut();
-    res.redirect(azureConfig.destroySessionUrl);
-  });
+  if(req.user){
+    req.session.destroy(function(err) {
+      req.logOut();
+      res.redirect(azureConfig.destroySessionUrl);
+    });
+  }
+  res.render('pages/auth/logout',{
+      title: "Logged Out - Dimension Data Bot Portal",
+      //message: req.flash('loginMessage')
+    })
 });
 
 module.exports = router
