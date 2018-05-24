@@ -51,9 +51,9 @@ const express = require('express')
         }).catch((error)=>res.send(error.response))
     });
 
-    router.put('/:id/',ensureAuthenticated,(req, res) =>{
+    router.post('/:id/',ensureAuthenticated,(req, res) =>{
       api.putUser(req.params.id,req.body,null).then((res)=>{
-        console.log('updated')
+        console.log('User updated')
       }).catch((error)=>{res.send(error)})
     });
 
