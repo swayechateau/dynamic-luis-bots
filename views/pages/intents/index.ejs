@@ -26,9 +26,13 @@
             <div class="col-sm-12">
               <div class="card">
                 <div class="card-body">
-                  <h1 class="card-title">Intents<span class="btn-right">
-                    <button type="button" data-toggle="modal" data-target=".bd-example-modal-lg" class="btn btn-md btn-success">Add Intent</button>
-                  </span></h1>
+                  <h1 class="card-title">Intents
+                    <%if(user.disabled===true){%>
+                    <span class="btn-right">
+                      <button type="button" data-toggle="modal" data-target=".bd-example-modal-lg" class="btn btn-md btn-success">Add Intent</button>
+                    </span>
+                    <%}%>
+                  </h1>
                   <p class="card-text">This is you can view existing questions the bot can answer, update them or create new ones.</p>
                 </div>
               </div>
