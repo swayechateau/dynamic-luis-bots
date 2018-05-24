@@ -22,8 +22,9 @@ const express = require('express')
     })
     //Post Requests
     router.post('/',(req, res) =>{
-
-
+      api.postUser(req.body,null,null).then((res)=>{
+        console.log('User Created')
+      }).catch((error)=>{res.send(error)})
     })
 
     router.get('/:id/',ensureAuthenticated,(req, res) =>{
@@ -51,12 +52,15 @@ const express = require('express')
     });
 
     router.put('/:id/',ensureAuthenticated,(req, res) =>{
-
-
+      api.putUser(req.params.id,req.body,null).then((res)=>{
+        console.log('updated')
+      }).catch((error)=>{res.send(error)})
     });
 
     router.delete('/:id/',ensureAuthenticated,(req,res)=>{
-
+      api.deleteUser().then((res)=>{
+        console.log('User Deleted')
+      }).catch((error)=>{res.send(error)})
     })
 
 module.exports = router
