@@ -13,8 +13,8 @@ const express = require('express')
     , guide = require('./routes/guides/index');
 
     router.get('/',ensureAuthenticated,(req,res)=>{
-      var user = api.getCurrentUser(req.user._id).then((res)=>{console.log(res.data)})
-      res.send()
+      var user = api.getCurrentUser(req.user._id)
+      res.send(user)
      /*   .then((perms)=>{
         perms.data.forEach((item,index)=>{
           if(item.userId === req.user._id){
