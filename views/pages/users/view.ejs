@@ -60,7 +60,7 @@
                         <%if(userEdit){%>
                         <input required type="text" class="form-control" id="email" name="preferred_username" value="<%=users.email%>" placeholder="<%=users.email%>">
                         <%}else{%>
-                        <input required readonly type="text" class="form-control-plaintext" id="email" name="email" value="<%=users.email%>" placeholder="<%=users.email%>">
+                        <input required readonly type="text" class="form-control-plaintext" id="email" name="preffered_username" value="<%=users.email%>" placeholder="<%=users.email%>">
                         <%}%>
                       </div>
                       <% if(users.disabled === true){%>
