@@ -10,7 +10,7 @@ const express = require('express')
         if (req.isAuthenticated()) { return next(); }
           res.redirect('/auth');
       }
-      global.user = {id:'5afcce86fb860e4dcc59a977', name:'Swaye Chateau', perm:{admin:false, wizard:true,department:'5abea0315abfbb0b50afdc0e'}}
+      //global.user = {id:'5afcce86fb860e4dcc59a977', name:'Swaye Chateau', perm:{admin:false, wizard:true,department:'5abea0315abfbb0b50afdc0e'}}
     , app = express()
     , port = process.env.PORT || 80
     , util = require('util')
