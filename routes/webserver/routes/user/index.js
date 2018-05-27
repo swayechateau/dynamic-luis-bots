@@ -58,7 +58,7 @@ const express = require('express')
       }).catch((error)=>{res.send(error)})
     });
 
-    router.delete('/:id/',ensureAuthenticated,(req,res)=>{
+    router.get('/:id/delete',ensureAuthenticated,(req,res)=>{
       api.deleteUser().then((res)=>{
         console.log('User Deleted')
         res.redirect('/user')
