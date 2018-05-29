@@ -12,6 +12,7 @@ router.get('/',ensureAuthenticated,(req, res) =>{
     departments = departmentResponse.data;
     res.render('./pages/setting/index',{
       title: "Site Configuration - Dimension Data Bot Portal",
+      user:req.user,
       confid: setting._id,
       skPlaceholder: setting.subscriptionKey,
       skValue: setting.subscriptionKey,

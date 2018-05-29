@@ -1,0 +1,19 @@
+<div class="modal fade bd-delete-modal" tabindex="-1" role="dialog" aria-labelledby="deleteUser" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Delete <% if(typeof users !== 'undefined'){%><%=users.name%><%}%></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure you want to remove <% if(typeof users !== 'undefined'){%><%=users.name%><%}%>?</p>
+          </div>
+          <div class="modal-footer">
+            <button id='delUserBtn' title="Let it go! Let it go! This user is not needed anyway" onclick="ajaxDelete('/user/<% if(typeof users !== 'undefined'){%><%=users._id%><%}%>')" class="btn btn-danger">Yes, I want this gone!</button>
+            <button title="What am I thinking! <% if(typeof users !== 'undefined'){%><%=users.name%><%}%> is needed" type="button" class="btn btn-secondary" data-dismiss="modal">No. Please stop me!</button>
+          </div>
+        </div>
+    </div>
+</div>

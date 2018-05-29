@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
     , Schema = mongoose.Schema
 
     , userSchema = new Schema({
-        disabled: {type: Boolean, default:false},
+        disabled: {type: Boolean},
         email:{type: String, lowercase: true, unique: true},
         name: String,
         azureOid: {type: String, unique: true},

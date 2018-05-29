@@ -13,10 +13,11 @@ router.get('/',ensureAuthenticated,(req,res)=>{
         return api.getIntents()})
     .then((response)=>{
         intents=response.data
-        return api.getDepartment(user.perm.department)})
+        return api.getDepartment(req.user.perm.department)})
     .then((response)=>{
         res.render('./pages/department/view',{
           title:response.data.friendlyName+' - Dimension Data Bot Portal',
+          user:req.user,
           data:response.data,
           intents:intents,
           config:config
@@ -30,6 +31,7 @@ router.get('/all',ensureAuthenticated,(req,res)=>{
     .then((response)=>{
         res.render('./pages/department/index',{
           title:'All Departments - Dimension Data Bot Portal',
+          user:req.user,
           departmentsData:response.data
         })
     })
@@ -68,6 +70,7 @@ router.get('/:id',ensureAuthenticated,(req,res)=>{
       .then((response)=>{
           res.render('./pages/department/view',{
             title:response.data.friendlyName+' - Dimension Data Bot Portal',
+            user:req.user,
             data:response.data,config:config,
             intents:intents
           })
@@ -103,7 +106,7 @@ router.get('/:id/intents',ensureAuthenticated,(req,res)=>{
     .catch((error)=>res.send(error.response.data))
 })
 
-router.get('/:id/appStatus',ensureAuthenticated,(req,res)=>{
+router.get('/:id/train',ensureAuthenticated,(req,res)=>{
     console.log('Check Train Status department')
     api.getDepartment(req.params.id)
     .then((response)=>{
@@ -116,7 +119,7 @@ router.get('/:id/appStatus',ensureAuthenticated,(req,res)=>{
     }).catch((error)=>res.send(error.response.data))
 
 })
-router.get('/:id/train/',ensureAuthenticated,(req,res)=>{
+router.post('/:id/train',ensureAuthenticated,(req,res)=>{
     console.log('Train Request Sent')
     api.getDepartment(req.params.id)
     .then((response)=>{
@@ -129,7 +132,7 @@ router.get('/:id/train/',ensureAuthenticated,(req,res)=>{
     }).catch((error)=>res.send(error.response.data))
 })
 
-router.get('/:id/delete/',ensureAuthenticated,(req,res)=>{
+router.delete('/:id',ensureAuthenticated,(req,res)=>{
     api.getDepartment(req.params.id)
     .then((response)=>{
         return api.deleteLuisApp(response.data.luisAppId)

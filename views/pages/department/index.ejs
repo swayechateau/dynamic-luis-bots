@@ -60,14 +60,14 @@
                                   c = departmentsData[i].created.split(/\D+/),
                                   updated = new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6])),
                                   created = new Date(Date.UTC(b[0], --c[1], c[2], c[3], c[4], c[5], c[6]))
-                         if(departmentsData[i].luisState ===''){var luisState = 'Unpublished', luisValue=''}else{luisState=luisValue=departmentsData[i].luisState}
+                         if(departmentsData[i].luisState ===null){var luisState = 'Unpublished', luisValue=''}else{luisState=luisValue=departmentsData[i].luisState}
                       %>
                         <th scope='row'><%=count%></th>
                         <td><%= departmentsData[i].friendlyName %></td>
                         <td><%= created %></td>
                         <td><%= updated%></td>
                         <td><%= luisState %></td>
-                        <td><a class="btn btn-primary" href="/department/<%= id %>">View</a><span class="btn-right"><button class="btn btn-danger" onclick="deleteDepartment('<%= id %>')">Delete</button></span></td>
+                        <td><a class="btn btn-primary" href="/department/<%= id %>">View</a><span class="btn-right"></span></td>
                       </tr>
                       <% } %>
                     </tbody>
@@ -102,11 +102,12 @@
 
     <% if(user.perm.wizard === true){ %>
         <% include ./modals/add %>
-      <%  include ./modals/delete %>
+      <%  //include ./modals/delete %>
       <%}%>
     <% //include ../../partials/aside %>
   </div>
   <% include ../../partials/footer %>
+  <% include ../../partials/scripts %>
 </body>
 
 </html>

@@ -17,6 +17,7 @@ router.get('/',ensureAuthenticated,(req, res) =>{
   })
     res.render('./pages/setting/install',{
       title: "Site First Setup Configuration - Dimension Data Bot Portal",
+      user:req.user,
       none: isNone
     })
   })

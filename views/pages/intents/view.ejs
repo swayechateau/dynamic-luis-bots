@@ -99,69 +99,12 @@
   </div>
   <% include ../../partials/footer %>
   <script>
-    let intentState = document.getElementsByName('disabled')[0],
-    bool = strToBool(intentState.value),
-    newUtt = document.getElementById('intent-utterance')
-    disabledStatus(bool)
-  function updateUtt (id){
-    var utt = document.getElementById(id).value,
-        url = window.location.toString()+'/utt',
-        trainReq = new XMLHttpRequest();
-    trainReq.addEventListener("load", reqListener);
-    trainReq.open("POST", url);
-    trainReq.setRequestHeader("Content-Type", "application/json");
-    trainReq.send(JSON.stringify({id:id, utt:{name:"<%=intent.name%>",newUtt:utt},department:"<%=intent.department%>"}));
-  }
-  function deleteUtt (id){
-    var utt = document.getElementById(id).value
-        url = window.location.toString()+'/utt',
-        trainReq = new XMLHttpRequest();
-
-    trainReq.addEventListener("load", reqListener);
-    trainReq.open("DELETE", url);
-    trainReq.setRequestHeader("Content-Type", "application/json");
-    trainReq.send(JSON.stringify({id:id, department:"<%=intent.department%>"}));
-  }
-  function reqListener () {
-    console.log(this.responseText)
-    if(this.responseText === "Utterance Updated"){
-      alert(this.responseText)
-      location.reload();
-    }else if(this.responseText === "Utterance Deleted"){
-      alert(this.responseText)
-      location.reload();
-    }else{
-      alert(this.responseText)
-    }
-    location.reload();
-  }
-  function toggleDisabled(){
-    bool = !bool;
-    intentState.value=bool
-    disabledStatus(bool)
-  }
-  function disabledStatus(bool){
-    let disabledBtn = document.getElementById('statusBtn')
-    if(bool===false){
-      disabledBtn.title="Intent is enabled"
-      disabledBtn.innerHTML="<i class='fa fa-check text-success'></i> Enabled!!"
-      disabledBtn.classList.remove('btn-secondary')
-      disabledBtn.classList.add('btn-info')
-    }else if(bool===true){
-      disabledBtn.title="intent is disabled"
-      disabledBtn.innerHTML="<i class='fa fa-times text-danger'></i> Disabled!!"
-      disabledBtn.classList.remove('btn-info')
-      disabledBtn.classList.add('btn-secondary')
-    }
-  }
-  function strToBool(str){
-    if (str === "false"){
-      return str = false
-    }else{
-      return str = true
-    }
-  }
-</script>
+  let intentState = document.getElementsByName('disabled')[0],
+      bool = strToBool(intentState.value),
+      newUtt = document.getElementById('intent-utterance')
+      disabledStatus(bool)
+  </script>
+  <% include ../../partials/scripts %>
 </body>
 
 </html>

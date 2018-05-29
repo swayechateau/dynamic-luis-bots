@@ -38,6 +38,7 @@ router.get('/:id', (req, res, next) => {
 router.post('/', (req, res, next) => {
     console.log('Post a user');
     var newuser = new user();
+    newuser.disabled = req.body.disabled
     newuser.email = req.body.email;
     newuser.name = req.body.name;
     newuser.azureOid = req.body.azureOid;
@@ -51,7 +52,29 @@ router.post('/', (req, res, next) => {
         }
     });
 })
-
+router.put('/:id/azure', (req, res, next) => {
+    console.log('Update a user');
+    user.findByIdAndUpdate(req.params.id,
+    {
+        $set: {
+            email: req.body.email,
+            name: req.body.name,
+            azureOid: req.body.azureOid,
+            updated: new Date,
+        }
+    },
+    {
+        new: true
+    },
+    (err, updateduser) => {
+        if(err){
+            res.send("Error updating user");
+        }else{
+            res.json(updateduser);
+        }
+    }
+    )
+})
 router.put('/:id', (req, res, next) => {
     console.log('Update a user');
     user.findByIdAndUpdate(req.params.id,
@@ -60,9 +83,7 @@ router.put('/:id', (req, res, next) => {
             disabled: req.body.disabled,
             email: req.body.email,
             name: req.body.name,
-            azureOid: req.body.azureOid,
-            password: req.body.pass,
-            created: new Date,
+            updated: new Date,
         }
     },
     {

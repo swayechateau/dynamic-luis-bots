@@ -14,6 +14,7 @@ const express = require('express')
       .then((response) => {
         res.render('pages/intents/index',{
           title: "Intents | Dimension Data Bot Portal",
+          user:req.user,
           intentsData:response.data,
           departments:departments
         })
@@ -65,6 +66,7 @@ const express = require('express')
         console.log(response.data);
         res.render('pages/intents/view',{
           title: `Intents - ${intent.friendlyName} | Dimension Data Bot Portal`,
+          user:req.user,
           intent:intent,
           departments:departments,
           utterance: response.data
@@ -72,21 +74,22 @@ const express = require('express')
       }).catch((error) => console.log(error));
 
     });
-    router.get('/:id/delete/',ensureAuthenticated,(req,res)=>{
+    router.delete('/:id',(req,res)=>{
       let intent
+      console.log('Delete Intent sent')
       api.getIntent(req.params.id)
       .then((response)=>{
         intent = response.data
         return api.getDepartment(intent.department)
       })
       .then((response)=>{
-        return api.deleteLuisIntent(response.data, intent.luisID)
+        return api.deleteLuisIntent(response.data, intent.luisId)
       })
       .then((response)=>{
         return api.deleteIntent(intent._id)
       })
       .then((response)=>{
-        res.send(response.data.name +' Has been sucessfully Deleted')
+        res.send(`${response.data.name} Has been sucessfully Deleted`)
       })
       .catch((error)=>console.log(error))
     })

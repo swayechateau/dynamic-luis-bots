@@ -11,19 +11,7 @@ const express = require('express')
     , intents = require('./routes/intents/index')
     , user = require('./routes/user/index')
     , guide = require('./routes/guides/index');
-
-    router.get('/',ensureAuthenticated,(req,res)=>{
-      var user = api.getCurrentUser(req.user._id)
-      res.send(user)
-     /*   .then((perms)=>{
-        perms.data.forEach((item,index)=>{
-          if(item.userId === req.user._id){
-            global.user = {id:req.user._id,name:req.user.name,perm:{admin:item.admin,wizard:item.wizard,department:item.department}}
-          }
-        })
-      })
-        res.redirect('/dashboard') */
-    })
+    router.get('/',ensureAuthenticated,(req,res)=>res.redirect('/dashboard'))
 	  //Auth
     router.use('/auth', auth);
     // Home page
@@ -42,9 +30,5 @@ const express = require('express')
     router.use('/intents/', intents);
     // Bot Framework User Guide page
     router.use('/guide/', guide);
-
-function isBlank(str) {
-    return (!str || /^\s*$/.test(str));
-}
 
 module.exports = router;

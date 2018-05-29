@@ -34,7 +34,7 @@
                   <h5 class="card-title"><%=users.name%>'s Profile
                     <% if(adminEdit){%>
                     <span class="btn-right">
-                      <button type="button" data-toggle="modal" data-target=".bd-add-modal-lg" class="btn btn-md btn-danger">Delete Member</button>
+                      <button type="button" data-toggle="modal" data-target=".bd-delete-modal" class="btn btn-md btn-danger">Delete Member</button>
                     </span>
                     <%}%>
                 </h5>
@@ -63,7 +63,7 @@
                         <input required readonly type="text" class="form-control-plaintext" id="email" name="preffered_username" value="<%=users.email%>" placeholder="<%=users.email%>">
                         <%}%>
                       </div>
-                      <% if(users.disabled === true){%>
+                      <% if(users.disabled !== false){%>
                       <div class="form-group col-md-4">
                         <label for="Status">Status</label>
                         <input readonly type="text" class="form-control-plaintext" id="status" name="status" value="Un-Authorised User, No Permissions" >
@@ -120,9 +120,11 @@
         </div>
       </div>
     </main>
+    <% include ./modals/delete %>
     <% //include ../../partials/aside %>
   </div>
   <% include ../../partials/footer %>
+  <% include ../../partials/scripts %>
 </body>
 
 </html>

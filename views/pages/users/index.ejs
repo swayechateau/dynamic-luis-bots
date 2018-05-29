@@ -55,7 +55,7 @@
                       <tbody id="userList">
                       <% for(let i=0; i< users.length; i++) { %>
                       <% var count = i+1;
-                          if(users[i].disabled === true){%>
+                          if(users[i].disabled !== false){%>
                         <tr>
                           <th scope='row'><%=count%></th>
                           <td><%= users[i].name %></td>
@@ -125,6 +125,7 @@
     <%}%>
   </div>
   <% include ../../partials/footer %>
+  <% include ../../partials/scripts %>
 </body>
 
 </html>

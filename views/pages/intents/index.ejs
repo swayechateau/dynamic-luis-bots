@@ -22,12 +22,15 @@
       </ol>
       <div class="container-fluid">
         <div class="animated fadeIn">
+        <% if(user.disabled !== false){%>
+          <% include ../error/401 %>
+        <%}else{%>
           <div class="row">
             <div class="col-sm-12">
               <div class="card">
                 <div class="card-body">
                   <h1 class="card-title">Intents
-                    <%if(user.disabled===true){%>
+                    <%if(user.disabled===false){%>
                     <span class="btn-right">
                       <button type="button" data-toggle="modal" data-target=".bd-example-modal-lg" class="btn btn-md btn-success">Add Intent</button>
                     </span>
@@ -73,7 +76,7 @@
                               <td><%= department %></td>
                               <td><%= updated%></td>
                               <td><%=disabled %></td>
-                              <td><a class="btn btn-primary" href="/intents/<%= id %>">View</a> <span class="btn-right"><button class="btn btn-danger" onclick="deleteintent('<%= id %>')">Delete</button></span></td>
+                              <td><a class="btn btn-primary" href="/intents/<%= id %>">View</a> <span class="btn-right"></span></td>
                               </tr>
                             <% }else{if(intentsData[i].department == user.perm.department){ %>
                                                                 <tr>
@@ -96,7 +99,7 @@
                               <td><%= department %></td>
                               <td><%= updated%></td>
                               <td><%=disabled %></td>
-                              <td><a class="btn btn-primary" href="/intents/<%= id %>">View</a> <span class="btn-right"><button class="btn btn-danger" onclick="deleteintent('<%= id %>')">Delete</button></span></td>
+                              <td><a class="btn btn-primary" href="/intents/<%= id %>">View</a> <span class="btn-right"></span></td>
                               </tr>
                             <% }}} %>
                         </tbody>
@@ -105,22 +108,16 @@
               </div>
             </div>
           </div>
+          <% include ./modals/add %>
+          <% //include ./modals/delete %>
+        <%}%>
         </div>
       </div>
     </main>
-    <% include ./modals/add %>
-    <% include ./modals/delete %>
     <% //include ../../partials/aside %>
   </div>
   <% include ../../partials/footer %>
-  <script>
-      function deleteintent(id){
-        let url = window.location.protocol+'//'+window.location.hostname+'/department/intents/'+id+'/delete/',
-            delBtn = document.getElementById('delIntentBtn');
-        delBtn.href=url
-        $(".bd-delete-modal").modal()
-      }
-  </script>
+  <% include ../../partials/scripts %>
 </body>
 
 </html>

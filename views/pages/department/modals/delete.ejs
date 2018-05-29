@@ -12,7 +12,7 @@
             <p>Feature to delete All intents with this department comming soon</p>
           </div>
           <div class="modal-footer">
-            <a id='delDepartmentBtn' title="Let it go! Let it go! This department is not needed anyway" href="../../department/<% if(typeof data !== 'undefined'){%><%=data._id%><%}%>/delete/" class="btn btn-danger">Yes, I want this gone!</a>
+            <button id='delDepartmentBtn' title="Let it go! Let it go! This department is not needed anyway" onclick="ajaxDelete('/department/<% if(typeof data !== 'undefined'){%><%=data._id%><%}%>')" class="btn btn-danger">Yes, I want this gone!</button>
             <button title="What am I thinking! This department is needed" type="button" class="btn btn-secondary" data-dismiss="modal">No. Please stop me!</button>
           </div>
         </div>

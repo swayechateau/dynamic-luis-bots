@@ -59,6 +59,7 @@ router.put('/:id', (req, res, next) => {
             wizard: req.body.wizard,
             department: req.body.department,
             admin: req.body.admin,
+            wizard: req.body.wizard,
             updated: new Date 
         }
     },

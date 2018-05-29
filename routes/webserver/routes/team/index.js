@@ -20,6 +20,7 @@ const express = require('express')
               title:'My Team - Dimension Data Bot Portal',
               departments:response.data,
               perms:perms,
+              user:req.user,
               users:users
             })
         })

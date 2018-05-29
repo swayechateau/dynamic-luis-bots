@@ -11,7 +11,7 @@
             <p>Are you sure you want to delete this intent?</p>
           </div>
           <div class="modal-footer">
-            <a id='delIntentBtn' title="Let it go! Let it go! This intent is not needed anyway" href="../intents/<% if(typeof intentsData !== 'undefined'){%><%=intentsData._id%><%}%>/delete/" class="btn btn-danger">Yes, I want this gone!</a>
+            <button id='delIntentBtn' title="Let it go! Let it go! This intent is not needed anyway" onclick="ajaxDelete('/intents/<% if(typeof intent !== 'undefined'){%><%=intent._id%><%}%>')" class="btn btn-danger">Yes, I want this gone!</button>
             <button title="What am I thinking! This intent is needed" type="button" class="btn btn-secondary" data-dismiss="modal">No. Please stop me!</button>
           </div>
         </div>

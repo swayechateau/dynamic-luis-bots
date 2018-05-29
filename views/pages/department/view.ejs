@@ -22,6 +22,9 @@
       </ol>
       <div class="container-fluid">
         <div class="animated fadeIn">
+        <% if(user.disabled !== false){%>
+          <% include ../error/401 %>
+        <%}else{%>
           <div class="row">
             <div class="col-sm-12">
               <div class="card">
@@ -151,28 +154,24 @@
               </div>
             </div>
           </div>
+          <% include ./modals/train %>
+          <% include ./modals/publish %>
+          <% include ./modals/delete %>
+        <%}%>
         </div>
       </div>
     </main>
-    <script>
-      var botEnd = document.getElementById('deptInfo'),
-          id = document.getElementsByName('id')[0].value;;
-          botEnd.innerHTML= botEnd.innerHTML +' '+ botMesageEndpoint()
-    function botMesageEndpoint(){
-      let host = window.location.protocol+'//'+window.location.hostname;
-      let botUrl = host + '/bot/'+id+'/messages';
-      return botUrl
-    }
-  </script>
-    <% include ./modals/train %>
 
-    <% include ./modals/publish %>
-
-    <% include ./modals/delete %>
     <% //include ../../partials/aside %>
   </div>
   <% include ../../partials/footer %>
-
+  <% include ../../partials/scripts %>
+  <script>
+    var botEnd = document.getElementById('deptInfo'),
+      id = document.getElementsByName('id')[0].value;
+      botMesageEndpoint(id)
+      departmentStatus(id)
+  </script>
 </body>
 
 </html>

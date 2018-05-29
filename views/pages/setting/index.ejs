@@ -38,7 +38,12 @@
             <div class="col-12">
               <div class="card">
                 <div class="card-body">
-                  <h3>Portal Configuration</h3>
+                  <h3>Portal Configuration
+                    <span class="btn-right">
+                      <button type="button" onclick="activateBots" class="btn btn-md btn-info">Reload Bots</button>
+                      <button type="button" onclick="reloadBots" class="btn btn-md btn-primary">Reload All Dialogs</button>
+                    </span>
+                  </h3>
                   <p>Please enter your LUIS Region and <a href="https://portal.azure.com/#blade/HubsExtension/BrowseResourceBlade/resourceType/Microsoft.CognitiveServices%2Faccounts">Ocp Apim Subscription Key</a></p>
                   <p>Note. A <a href="https://azure.microsoft.com/en-us/try/cognitive-services/?api=spellcheck-api"> bing Spellcheck Api Key</a> is optional</p>
                   <form action="/config/" method="post">
@@ -112,23 +117,7 @@
     <% //include ../../partials/aside %>
   </div>
   <% include ../../partials/footer %>
-  <script>
-    function deleteDepartment(id){
-      let url = window.location.protocol+'//'+window.location.hostname+'/department/'+id+'/delete/',
-          delBtn = document.getElementById('delDepartmentBtn');
-      delBtn.href=url
-      $(".bd-delete-modal").modal()
-
-    }
-    function checkBing(){
-        var bingKey = document.getElementById('bingApiKey'),bingStatus= document.getElementById('bingApiStatus')
-        if(bingKey.value === '' && bingStatus.value === 'Enabled'){
-            bingKey.required=true
-        }else{
-            bingKey.required=false
-        }
-    }
-  </script>
+  <% include ../../partials/scripts %>
 </body>
 
 </html>
