@@ -9,7 +9,7 @@ router.get('/',ensureAuthenticated,(req, res) =>{
 
   api.getDepartments()
   .then((response)=>{
-    if(response.data < 1 || response.data === 'Error retrieving settings'){
+    if(response.data < 1){
       isNone = true}else{isNone = false}})
   .catch((error)=>{
       console.log(error)
