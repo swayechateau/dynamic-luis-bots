@@ -26,7 +26,7 @@ router.get('/',ensureAuthenticated,(req, res) =>{
     console.log('Generating New Setting')
     if(isNone === false){
       api.postSetting(req.body).then((response)=>{
-          res.redirect('/')
+          res.redirect('/dashboard')
       }).catch((error)=>{
           console.log(error)
           res.send(error)
