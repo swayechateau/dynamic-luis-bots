@@ -97,11 +97,11 @@ function departmentStatus(id) {
               }
             }
           }
-        trainStatus(failed)
+        trainStatus(failed,id)
       }else{
         swal('Department Info','Department Bot needs to train first','info')
         spawnNotification('Department Bot needs to train first','','Department Info')
-        trainModel(id)
+        trainModal(id)
       }
     })
   );
@@ -119,11 +119,11 @@ function trainModal(id){
         departmentStatus(id)
       }).catch((err)=>{
           spawnNotification(err,'','Training Error');
-          swal('Training Error',err,'error');
+          //swal('Training Error',err,'error');
       })
 }
 // Train Status
-function trainStatus(failed){
+function trainStatus(failed,id){
     let trainStatus = document.getElementById('train-status'),
         trainBtn = document.getElementById('trainBtn'),
         trainP = document.getElementById('trainP')
@@ -133,7 +133,7 @@ function trainStatus(failed){
         trainBtn.classList.add('btn-secondary')
         trainStatus.classList.add('fa-check')
         trainStatus.classList.add('text-success')
-        trainP.innerHTML = `Department training was a success! Nothing to see here <span class="btn-right"><button class="btn btn-info" onclick = 'reloadBot("<%=data._id%>")'>Train Department</button></span>`;
+        trainP.innerHTML = `Department training was a success! Nothing to see here <span class="btn-right"><button class="btn btn-info" onclick = 'reloadBot("${id}")'>Train Department</button></span>`;
         spawnNotification('Department is up to date!','','Bot is good to go!!!')
     }else{
         trainBtn.title="Bot needs training!!!"
@@ -141,7 +141,7 @@ function trainStatus(failed){
         trainBtn.classList.add('btn-warning')
         trainStatus.classList.add('fa-exclamation')
         trainStatus.classList.add('text-danger')
-        trainP.innerHTML = `Department training Failed! <span class='btn-right'><button class='btn btn-info' onclick = 'trainModal("<%=data._id%>")'>Train Department</button></span> <p> FewLabels = Not enough Utterances for practical use!</p>`
+        trainP.innerHTML = `Department training Failed! <span class='btn-right'><button class='btn btn-info' onclick = 'trainModal("${id}")'>Train Department</button></span> <p> FewLabels = Not enough Utterances for practical use!</p>`
         spawnNotification('Department training Failed!','','Bot needs training!!!')
         swal('Department training Failed!','Bot needs training!!!','warning')
     }
