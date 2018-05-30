@@ -141,7 +141,7 @@ function trainStatus(failed){
         trainBtn.classList.add('btn-warning')
         trainStatus.classList.add('fa-exclamation')
         trainStatus.classList.add('text-danger')
-        trainP.innerHTML = "Department training Failed! <span class='btn-right'><button class='btn btn-info' onclick = 'trainModel()'>Train Department</button></span> <p> FewLabels = Not enough Utterances for practical use!</p>"
+        trainP.innerHTML = `Department training Failed! <span class='btn-right'><button class='btn btn-info' onclick = 'trainModal("<%=data._id%>")'>Train Department</button></span> <p> FewLabels = Not enough Utterances for practical use!</p>`
         spawnNotification('Department training Failed!','','Bot needs training!!!')
         swal('Department training Failed!','Bot needs training!!!','warning')
     }
