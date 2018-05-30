@@ -11,8 +11,7 @@ router.get('/',(req, res) =>{
     })
   })
 // sso ===================================
-router.get('/sso',
-  function(req, res, next) {
+router.get('/sso',(req, res, next)=> {
     passport.authenticate('azuread-openidconnect',
       {
         response: res,                      // required
@@ -21,15 +20,13 @@ router.get('/sso',
         failureRedirect: '/auth'
       }
     )(req, res, next);
-  },
-  function(req, res) {
+  },(req, res)=> {
     console.log('Login was called Bot-Framework');
 
     res.redirect('/');
 });
 // openid GET returnURL=========================
-router.get('/openid/return',
-  function(req, res, next) {
+router.get('/openid/return',(req, res, next)=> {
     passport.authenticate('azuread-openidconnect',
       {
         response: res,                      // required
@@ -37,15 +34,14 @@ router.get('/openid/return',
       }
     )(req, res, next);
   },
-  function(req, res) {
+  (req, res)=> {
     console.log('We received a return from AzureAD.');
 
     res.redirect('/');
   });
 
 // openid POST returnURL=========================
-router.post('/openid/return',
-  function(req, res, next) {
+router.post('/openid/return',(req, res, next)=> {
     passport.authenticate('azuread-openidconnect',
       {
         response: res,                      // required
@@ -53,23 +49,24 @@ router.post('/openid/return',
       }
     )(req, res, next);
   },
-  function(req, res) {
+  (req, res)=> {
     console.log('We received a return from AzureAD.');
 
     res.redirect('/');
   });
 // LOGOUT ================================
-router.get('/logout', function(req, res){
+router.get('/logout', (req, res)=>{
   if(req.user){
-    req.session.destroy(function(err) {
-      req.logOut();
+    req.session.destroy((err)=> {
       res.redirect(azureConfig.destroySessionUrl);
+      req.logOut();
     });
-  }
-  res.render('pages/auth/logout',{
-      title: "Logged Out - Dimension Data Bot Portal",
-      //message: req.flash('loginMessage')
+  }else{
+    res.render('pages/auth/logout',{
+      title: "Logged Out - Dimension Data Bot Portal"
     })
+  }
+  
 });
 
 module.exports = router

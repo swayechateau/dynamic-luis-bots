@@ -37,12 +37,12 @@ router.get('/:id', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
     console.log('Post a user');
+    console.log(req.body)
     var newuser = new user();
     newuser.disabled = req.body.disabled
     newuser.email = req.body.email;
     newuser.name = req.body.name;
     newuser.azureOid = req.body.azureOid;
-    newuser.password = req.body.pass
     newuser.created = new Date;
     newuser.save((err, inserteduser) => {
         if(err){
