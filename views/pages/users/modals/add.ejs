@@ -45,8 +45,10 @@
             <div class="form-group col-md-3">
               <label for="wizard">Portal Admin</label>
               <select class="form-control" name="wizard">
-                <option value="false">No</option>
+              <% if(user.perm.wizard==true){%>
                 <option value="true">Yes</option>
+              <%}%>
+                <option value="false">No</option>
               </select>
             </div>
 
