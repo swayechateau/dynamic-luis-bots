@@ -59,7 +59,7 @@ router.put('/:id', (req, res, next) => {
             subscriptionKey: req.body.subKey, 
             luisRegion: req.body.luisRegion, 
             bingApiKey: req.body.bingKey,
-            bingSpellCheckEnabled: req.body.bingStatus,
+            bingSpellCheckEnabled: bingStatus,
             updated: new Date
         }
     },

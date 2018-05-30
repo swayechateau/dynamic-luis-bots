@@ -10,11 +10,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Swaye Chateau",
-  "engines": {
-    "node": "8.11.2"
-  },
   "license": "ISC",
-  "repository": { 
+  "repository": {
     "type": "git",
     "url": "git+https://github.com/MercylessReap/bot-framework.git"
   },
