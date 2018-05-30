@@ -5,12 +5,15 @@
   "description": "Simple Node.js Bot Framework Platform for Azure App Service",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node server",
     "dev": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Swaye Chateau",
   "license": "ISC",
+  "engines": {
+    "node": "~0.10.0 || ~4.2.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MercylessReap/bot-framework.git"
