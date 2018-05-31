@@ -225,7 +225,7 @@ function deleteIntent(id){
 // Disable Intent Button
 function toggleDisabled(){
     let bool,intentState= document.getElementsByName('disabled')[0]
-    bool=intentState.value
+    bool=strToBool(intentState.value)
     bool = !bool;
     intentState.value=bool
     disabledStatus(bool)
@@ -245,7 +245,14 @@ function disabledStatus(bool){
       disabledBtn.classList.add('btn-secondary')
     }
 }
-//
+//convert string to bool
+function strToBool(str){
+    if (str === "false"){
+      return str = false
+    }else{
+      return str = true
+    }
+}
 function activateBots(){
   let url = `/bot/dynamic`
   axios.post(host+url).then((response)=>{
