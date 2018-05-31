@@ -67,12 +67,12 @@ function getLuisIntents(id){
 }
 // check department status
 function departmentStatus(id) {
-  let failed = false,
-      trainTable = document.getElementById('train-list'),
-      trainList = trainTable.innerHTML
   axios.all([getLuisIntents(id), trainDepartment(id)])
     .then(axios.spread((intents, status)=> {
-    
+      let failed,
+          trainTable = document.getElementById('train-list'),
+          trainList = trainTable.innerHTML
+      if(status.data!==''){
           for(let i=0; i< status.data.length; i++){
             if(status.data[i].details.status === "Fail"){
               intents.data.forEach((item,index)=>{
@@ -84,7 +84,7 @@ function departmentStatus(id) {
               failed = true
             }
           }
-          if(failed ===false){
+          if(failed !==true){
             for(let i=0; i< status.data.length; i++){
               if(status.data[i].details.status === "Success"){
                 intents.data.forEach((item,index)=>{
@@ -97,8 +97,12 @@ function departmentStatus(id) {
               }
             }
           }
-        trainStatus(failed,id)
-      
+        trainStatus(failed)
+      }else{
+        swal('Department Info','Department Bot needs to train first','info')
+        spawnNotification('Department Bot needs to train first','','Department Info')
+        trainModel(id)
+      }
     })
   );
 }

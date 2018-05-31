@@ -235,36 +235,6 @@
         document.getElementById('train-table').classList.add('table')
   }
 
-  function trainModel(){
-    let url = window.location.toString()+"/train"
-    var trainReq = new XMLHttpRequest();
-    trainReq.addEventListener("load", reqListener);
-    trainReq.open("GET", url);
-    trainReq.send();
-  }
-
-  function findIntentName(id){
-
-  }
-  function getLuisIntents(){
-    let url = window.location.toString()+"/intents",
-        intentNameReq = new XMLHttpRequest();
-        intentNameReq.open("GET", url, true);
-    intentNameReq.addEventListener("load", test)
-    intentNameReq.send(null);
-  }
-  function test(){
-    luisIntents= JSON.parse(this.responseText);
-  }
-
-  var url = window.location.toString()+"/appstatus",
-      luisIntents
-  var oReq = new XMLHttpRequest();
-  oReq.addEventListener("load", reqListener);
-  oReq.open("GET", url);
-  oReq.send();
-    
-    
     var botEnd = document.getElementById('deptInfo'),
       id = document.getElementsByName('id')[0].value;
       botMesageEndpoint(id)
