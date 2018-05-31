@@ -109,10 +109,10 @@ function departmentStatus(id) {
 // Train Modal
 function trainModal(id){
     trainDepartment(id,'post').then((resp)=>{
-        if(typeof status.data.error !== 'undefined'){
+        if(status.data.error){
           spawnNotification(status.data.error.message,'','Training Error')
           swal('Training Error',status.data.error.message,'error')
-        }else if(typeof status.data.status !== 'undefined'){
+        }else{
           spawnNotification(status.data.status,'','Training Status')
           swal('Training Status',status.data.status,'success')
         }
