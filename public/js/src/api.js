@@ -222,7 +222,7 @@ function deleteIntent(id){
     delBtn.onclick=ajaxDelete(url)
     $(".bd-delete-modal").modal()
 }
-//
+// Disable Intent Button
 function toggleDisabled(){
     let bool,intentState= document.getElementsByName('disabled')[0]
     bool=intentState.value
@@ -230,6 +230,7 @@ function toggleDisabled(){
     intentState.value=bool
     disabledStatus(bool)
 }
+// Show if intent is disabled or enabledd
 function disabledStatus(bool){
     let disabledBtn = document.getElementById('statusBtn')
     if(bool===false){
