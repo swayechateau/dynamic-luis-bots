@@ -108,18 +108,28 @@ function departmentStatus(id) {
 }
 // Train Modal
 function trainModal(id){
-    trainDepartment(id,'post').then((resp)=>{
+    trainDepartment(id,'post').then((status)=>{
         if(status.data.error){
           spawnNotification(status.data.error.message,'','Training Error')
-          swal('Training Error',status.data.error.message,'error')
+          swal('Training Error',status.data.error.message,'error').then((value) => {
+            switch (value) {
+              default:
+              departmentStatus(id);
+            }
+          });
         }else{
           spawnNotification(status.data.status,'','Training Status')
-          swal('Training Status',status.data.status,'success')
+          swal('Training Status',status.data.status,'success').then((value) => {
+            switch (value) {
+              default:
+              departmentStatus(id);
+            }
+          });
         }
-        departmentStatus(id)
       }).catch((err)=>{
-          spawnNotification(err,'','Training Error');
-          //swal('Training Error',err,'error');
+          console.log(err)
+          spawnNotification('Somthing Happend','','Training Error');
+          swal('Training Error','Somthing Happend','error');
       })
 }
 // Train Status
