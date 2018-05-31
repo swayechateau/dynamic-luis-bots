@@ -170,23 +170,42 @@ function postIntent(){
     postIntent.submit();
 }
 // Update Intent
-location.reload();
+
 function updateUtt (id){
-    var utt = document.getElementById(id).value,
-        url = window.location.toString()+'/utt';
-    
-    trainReq.open("POST", url);
-    
-    trainReq.send(JSON.stringify({id:id, utt:{name:"<%=intent.name%>",newUtt:utt},department:"<%=intent.department%>"}));
+  var utt = document.getElementById(id).value,
+      url = window.location.toString()+'/utt';
+  ajaxPost(url)
+    .then((response)=>{
+    swal().then((value)=>{
+      location.reload();
+    })
+  });
+  axios.post(host+url,{id:id, utt:{name:"<%=intent.name%>",newUtt:utt},department:"<%=intent.department%>"}).then((response)=>{
+    swal("Sucessfully Updated!", response.data, "success").then((value) => {
+        switch (value) {
+          default:
+            window.history.go(-1); return false;
+        }
+    });
+  }).catch((error)=>{
+    swal("uh-oh!",error.response.data,'error');
+  })
 }
 // Delete Utterance
 
   function deleteUtt (id){
-    var utt = document.getElementById(id).value
+    let utt = document.getElementById(id).value,
         url = window.location.toString()+'/utt';
-
-    ajaxDelete(url,{id:id, department:"<%=intent.department%>"})
-
+    axios.delete(host+url,{id:id, department:"<%=intent.department%>"}).then((response)=>{
+    swal("Sucessfully Deleted!", response.data, "success").then((value) => {
+        switch (value) {
+          default:
+            location.reload(); return false;
+        }
+    });
+  }).catch((error)=>{
+    swal("uh-oh!",error.response.data,'error');
+  })
   }
 // delete intent
 function deleteIntent(id){

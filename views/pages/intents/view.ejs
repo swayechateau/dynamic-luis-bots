@@ -99,10 +99,8 @@
   </div>
   <% include ../../partials/footer %>
   <script>
-  let intentState = document.getElementsByName('disabled')[0],
-      bool = strToBool(intentState.value),
-      newUtt = document.getElementById('intent-utterance')
-      disabledStatus(bool)
+  let newUtt = document.getElementById('intent-utterance');
+      disabledStatus(document.getElementsByName('disabled')[0])
   </script>
   <% include ../../partials/scripts %>
 </body>
