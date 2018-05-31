@@ -223,8 +223,9 @@ function deleteIntent(id){
     $(".bd-delete-modal").modal()
 }
 //
-function toggleDisabled(intentState){
-    let bool=intentState.value
+function toggleDisabled(){
+    let bool,intentState= document.getElementsByName('disabled')[0]
+    bool=intentState.value
     bool = !bool;
     intentState.value=bool
     disabledStatus(bool)
