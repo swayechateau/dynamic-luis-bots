@@ -170,7 +170,24 @@ function postIntent(){
     postIntent.submit();
 }
 // Update Intent
+location.reload();
+function updateUtt (id){
+    var utt = document.getElementById(id).value,
+        url = window.location.toString()+'/utt';
+    
+    trainReq.open("POST", url);
+    
+    trainReq.send(JSON.stringify({id:id, utt:{name:"<%=intent.name%>",newUtt:utt},department:"<%=intent.department%>"}));
+}
 // Delete Utterance
+
+  function deleteUtt (id){
+    var utt = document.getElementById(id).value
+        url = window.location.toString()+'/utt';
+
+    ajaxDelete(url,{id:id, department:"<%=intent.department%>"})
+
+  }
 // delete intent
 function deleteIntent(id){
     let url = window.location.protocol+'//'+window.location.hostname+'/intents/'+id,
@@ -178,6 +195,28 @@ function deleteIntent(id){
     delBtn.onclick=ajaxDelete(url)
     $(".bd-delete-modal").modal()
 }
+//
+function toggleDisabled(intentState){
+    let bool=intentState.value
+    bool = !bool;
+    intentState.value=bool
+    disabledStatus(bool)
+}
+function disabledStatus(bool){
+    let disabledBtn = document.getElementById('statusBtn')
+    if(bool===false){
+      disabledBtn.title="Intent is enabled"
+      disabledBtn.innerHTML="<i class='fa fa-check text-success'></i> Enabled!!"
+      disabledBtn.classList.remove('btn-secondary')
+      disabledBtn.classList.add('btn-info')
+    }else if(bool===true){
+      disabledBtn.title="intent is disabled"
+      disabledBtn.innerHTML="<i class='fa fa-times text-danger'></i> Disabled!!"
+      disabledBtn.classList.remove('btn-info')
+      disabledBtn.classList.add('btn-secondary')
+    }
+}
+//
 function activateBots(){
   let url = `/bot/dynamic`
   axios.post(host+url).then((response)=>{
