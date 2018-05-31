@@ -37,7 +37,7 @@ function ajaxPost (url, array){
 function ajaxPut (url, array){
   axios.delete(host+url,array).then((response)=>{
     swal(response.data);
-    window.location.replace("http://stackoverflow.com");
+    //window.location.replace("http://stackoverflow.com");
   }).catch((error)=>{
     swal(error.response.data);
   })
