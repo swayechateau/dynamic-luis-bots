@@ -7,22 +7,22 @@ let isNone
 router.get('/',ensureAuthenticated,(req, res) =>{
 
   api.getSettings().then((sett)=>{
-    if(sett.data == 1 ){
-    }
-  })
-  api.getDepartments()
-  .then((response)=>{
-    if(response.data.length < 1){
-      isNone = true}else{isNone = false}})
-    res.render('./pages/setting/install',{
-      title: "Site First Setup Configuration - Dimension Data Bot Portal",
-      user:req.user,
-      none: isNone
+    if(sett.data.length === 1 ){
+      res.redirect('/dashboard')
+    }else{
+      return api.getDepartments().then((response)=>{
+      if(response.data.length < 1){isNone = true}else{isNone = false}
+      res.render('./pages/setting/install',{
+        title: "Site First Setup Configuration - Dimension Data Bot Portal",
+        user:req.user,
+        none: isNone
+      })
     })
-  .catch((error)=>{
+    }
+  }).catch((error)=>{
       console.log(error)
       res.send(error)
-  })
+    })
   })
 
   router.post('/',ensureAuthenticated,(req, res) =>{
@@ -32,7 +32,7 @@ router.get('/',ensureAuthenticated,(req, res) =>{
         return api.postLuisApp(req.body.name).then((response)=>{
           return api.postDepartment(req.body,response.data).then((response)=>{
             let array={department:response.data._id}
-            return api.putUser(user.id,array).then((response)=>{
+            return api.putUser(req.user.id,array).then((response)=>{
               res.redirect('/dashboard')
             })
           })
