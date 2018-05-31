@@ -36,7 +36,7 @@ router.post('/',ensureAuthenticated,(req, res) =>{
   }
   api.putSetting(req.body,bingStatus).then((response)=>{
     console.log(response)
-    res.json(response)
+    res.redirect(req.get('referer'))
   }).catch((error)=>{
     console.log(error)
     res.json(error)

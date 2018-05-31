@@ -33,14 +33,14 @@ router.get('/',ensureAuthenticated,(req, res) =>{
       })
     }else{
       api.postSetting(req.body).then((response)=>{
-          return api.postLuisApp(req.body.name)
-      }).then((response)=>{
-          return api.postDepartment(req.body,response.data)
-      }).then((response)=>{
-        let array={department:response.data._id}
-        return api.putUser(user.id,array)
-      }).then((response)=>{
-          res.redirect('/')
+        return api.postLuisApp(req.body.name).then((response)=>{
+          return api.postDepartment(req.body,response.data).then((response)=>{
+            let array={department:response.data._id}
+            return api.putUser(user.id,array).then((response)=>{
+              res.redirect('/')
+            })
+          })
+        })
       }).catch((error)=>{
           console.log(error)
           res.send(error)
