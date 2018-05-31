@@ -174,17 +174,11 @@ function postIntent(){
 function updateUtt (id){
   var utt = document.getElementById(id).value,
       url = window.location.toString()+'/utt';
-  ajaxPost(url)
-    .then((response)=>{
-    swal().then((value)=>{
-      location.reload();
-    })
-  });
   axios.post(host+url,{id:id, utt:{name:"<%=intent.name%>",newUtt:utt},department:"<%=intent.department%>"}).then((response)=>{
     swal("Sucessfully Updated!", response.data, "success").then((value) => {
         switch (value) {
           default:
-            window.history.go(-1); return false;
+            location.reload(); return false;
         }
     });
   }).catch((error)=>{
