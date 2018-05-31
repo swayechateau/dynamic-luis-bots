@@ -169,7 +169,8 @@ function postIntent(){
     swalt('button clicked')
     postIntent.submit();
 }
-
+// Update Intent
+// Delete Utterance
 // delete intent
 function deleteIntent(id){
     let url = window.location.protocol+'//'+window.location.hostname+'/intents/'+id,
