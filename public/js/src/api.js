@@ -174,7 +174,7 @@ function postIntent(){
 function updateUtt (id){
   var utt = document.getElementById(id).value,
       url = window.location.toString()+'/utt';
-  axios.post(host+url,{id:id, utt:{name:"<%=intent.name%>",newUtt:utt},department:"<%=intent.department%>"}).then((response)=>{
+  axios.post(url,{id:id, utt:{name:"<%=intent.name%>",newUtt:utt},department:"<%=intent.department%>"}).then((response)=>{
     swal("Sucessfully Updated!", response.data, "success").then((value) => {
         switch (value) {
           default:
@@ -190,7 +190,7 @@ function updateUtt (id){
   function deleteUtt (id){
     let utt = document.getElementById(id).value,
         url = window.location.toString()+'/utt';
-    axios.delete(host+url,{id:id, department:"<%=intent.department%>"}).then((response)=>{
+    axios.delete(url,{id:id, department:"<%=intent.department%>"}).then((response)=>{
     swal("Sucessfully Deleted!", response.data, "success").then((value) => {
         switch (value) {
           default:
