@@ -40,13 +40,13 @@
                 <div class="card-body">
                   <h3>Portal Configuration
                     <span class="btn-right">
-                      <button type="button" onclick="activateBots()" class="btn btn-md btn-info">Reload Bots</button>
-                      <button type="button" onclick="reloadBots()" class="btn btn-md btn-primary">Reload All Dialogs</button>
+                      <button type="button" onclick="activateBots" class="btn btn-md btn-info">Reload Bots</button>
+                      <button type="button" onclick="reloadBots" class="btn btn-md btn-primary">Reload All Dialogs</button>
                     </span>
                   </h3>
                   <p>Please enter your LUIS Region and <a href="https://portal.azure.com/#blade/HubsExtension/BrowseResourceBlade/resourceType/Microsoft.CognitiveServices%2Faccounts">Ocp Apim Subscription Key</a></p>
                   <p>Note. A <a href="https://azure.microsoft.com/en-us/try/cognitive-services/?api=spellcheck-api"> bing Spellcheck Api Key</a> is optional</p>
-                  <form action="/portal-config/" method="post">
+                  <form action="/config/" method="post">
                   <% if(skPlaceholder == '' ){skPlaceholder="Please enter Ocp Apim Subscription Key"}; %>
                   <%   if(bkPlaceholder == ''){bkPlaceholder="Please enter Bing Api Key -optional-"}; %>
                     <div class="form-row">

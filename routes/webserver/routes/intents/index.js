@@ -147,7 +147,7 @@ const express = require('express')
       }).catch((error)=>res.send(error.response.data))
 
     });
-    router.post('/:id/utt',(req, res) =>{
+    router.post('/:id/utt',ensureAuthenticated,(req, res) =>{
       console.log('update intent utterance sent')
       console.log(req.body)
       let department
@@ -158,7 +158,7 @@ const express = require('express')
       .catch((error)=>res.send(error.response))
     });
 
-    router.delete('/:id/utt',(req, res) =>{
+    router.delete('/:id/utt',ensureAuthenticated,(req, res) =>{
       console.log('delete intent utterance sent')
       console.log(req.body)
       api.getDepartment(req.body.department)

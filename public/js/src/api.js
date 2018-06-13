@@ -37,7 +37,7 @@ function ajaxPost (url, array){
 function ajaxPut (url, array){
   axios.delete(host+url,array).then((response)=>{
     swal(response.data);
-    //window.location.replace("http://stackoverflow.com");
+    window.location.replace("http://stackoverflow.com");
   }).catch((error)=>{
     swal(error.response.data);
   })
@@ -56,7 +56,7 @@ function trainDepartment(id,type){
     if(type==='post'){
       return axios.post(url)
     }else{
-      return axios.get(url)    
+      return axios.get(url)
     }
   }
 
@@ -69,10 +69,10 @@ function getLuisIntents(id){
 function departmentStatus(id) {
   axios.all([getLuisIntents(id), trainDepartment(id)])
     .then(axios.spread((intents, status)=> {
-      let failed,
-          trainTable = document.getElementById('train-list'),
+      let trainTable = document.getElementById('train-list'),
           trainList = trainTable.innerHTML
-      if(status.data!==''){
+      if(status.data){
+        let failed = false;
           for(let i=0; i< status.data.length; i++){
             if(status.data[i].details.status === "Fail"){
               intents.data.forEach((item,index)=>{
@@ -84,7 +84,7 @@ function departmentStatus(id) {
               failed = true
             }
           }
-          if(failed !==true){
+          if(failed ===false){
             for(let i=0; i< status.data.length; i++){
               if(status.data[i].details.status === "Success"){
                 intents.data.forEach((item,index)=>{
@@ -99,9 +99,13 @@ function departmentStatus(id) {
           }
         trainStatus(failed,id)
       }else{
-        swal('Department Info','Department Bot needs to train first','info')
         spawnNotification('Department Bot needs to train first','','Department Info')
-        trainModal(id)
+        swal('Department Info','Department Bot needs to train first','info').then((value) => {
+          switch (value) {
+            default:
+            trainModal(id);
+          }
+        });
       }
     })
   );
@@ -133,7 +137,6 @@ function trainModal(id){
       })
 }
 // Train Status
-
 function trainStatus(failed,id){
     let trainStatus = document.getElementById('train-status'),
         trainBtn = document.getElementById('trainBtn'),
@@ -144,7 +147,7 @@ function trainStatus(failed,id){
         trainBtn.classList.add('btn-secondary')
         trainStatus.classList.add('fa-check')
         trainStatus.classList.add('text-success')
-        trainP.innerHTML = `Department training was a success! Nothing to see here <span class="btn-right"><button class="btn btn-info" onclick = 'reloadBot("${id}")'>Reload Department Dialogs</button></span>`;
+        trainP.innerHTML = `Department training was a success! Nothing to see here <span class="btn-right"><button class="btn btn-info" onclick = 'reloadBot("${id}")'>Train Department</button></span>`;
         spawnNotification('Department is up to date!','','Bot is good to go!!!')
     }else{
         trainBtn.title="Bot needs training!!!"
@@ -152,9 +155,9 @@ function trainStatus(failed,id){
         trainBtn.classList.add('btn-warning')
         trainStatus.classList.add('fa-exclamation')
         trainStatus.classList.add('text-danger')
-        trainP.innerHTML = `Department training Failed! <span class='btn-right'><button class='btn btn-success' onclick = 'trainModal("${id}")'>Train Department</button></span> <p> FewLabels = Not enough Utterances for practical use!</p>`
-        spawnNotification('Department training Failed!','','Bot failed training!!!')
-        swal('Department training Failed!','Bot failed training!!!','warning')
+        trainP.innerHTML = `Department training Failed! <span class='btn-right'><button class='btn btn-info' onclick = 'trainModal("${id}")'>Train Department</button></span> <p> FewLabels = Not enough Utterances for practical use!</p>`
+        spawnNotification('Department training Failed!','','Bot needs training!!!')
+        swal('Department training Failed!','Bot needs training!!!','warning')
     }
     document.getElementById('train-table').classList.add('table')
 }
@@ -180,75 +183,13 @@ function postIntent(){
     swalt('button clicked')
     postIntent.submit();
 }
-// Update Intent
 
-function updateUtt (id){
-  var utt = document.getElementById(id).value,
-      url = window.location.toString()+'/utt';
-  axios.post(url,{id:id, utt:{name:"<%=intent.name%>",newUtt:utt},department:"<%=intent.department%>"}).then((response)=>{
-    swal("Sucessfully Updated!", response.data, "success").then((value) => {
-        switch (value) {
-          default:
-            location.reload(); return false;
-        }
-    });
-  }).catch((error)=>{
-    swal("uh-oh!",error.response.data,'error');
-  })
-}
-// Delete Utterance
-
-  function deleteUtt (id){
-    let utt = document.getElementById(id).value,
-        url = window.location.toString()+'/utt';
-    axios.delete(url,{id:id, department:"<%=intent.department%>"}).then((response)=>{
-    swal("Sucessfully Deleted!", response.data, "success").then((value) => {
-        switch (value) {
-          default:
-            location.reload(); return false;
-        }
-    });
-  }).catch((error)=>{
-    swal("uh-oh!",error.response.data,'error');
-  })
-  }
 // delete intent
 function deleteIntent(id){
     let url = window.location.protocol+'//'+window.location.hostname+'/intents/'+id,
         delBtn = document.getElementById('delIntentBtn');
     delBtn.onclick=ajaxDelete(url)
     $(".bd-delete-modal").modal()
-}
-// Disable Intent Button
-function toggleDisabled(){
-    let bool,intentState= document.getElementsByName('disabled')[0]
-    bool=strToBool(intentState.value)
-    bool = !bool;
-    intentState.value=bool
-    disabledStatus(bool)
-}
-// Show if intent is disabled or enabledd
-function disabledStatus(bool){
-    let disabledBtn = document.getElementById('statusBtn')
-    if(bool===false){
-      disabledBtn.title="Intent is enabled"
-      disabledBtn.innerHTML="<i class='fa fa-check text-success'></i> Enabled!!"
-      disabledBtn.classList.remove('btn-secondary')
-      disabledBtn.classList.add('btn-info')
-    }else if(bool===true){
-      disabledBtn.title="intent is disabled"
-      disabledBtn.innerHTML="<i class='fa fa-times text-danger'></i> Disabled!!"
-      disabledBtn.classList.remove('btn-info')
-      disabledBtn.classList.add('btn-secondary')
-    }
-}
-//convert string to bool
-function strToBool(str){
-    if (str === "false"){
-      return str = false
-    }else{
-      return str = true
-    }
 }
 function activateBots(){
   let url = `/bot/dynamic`
